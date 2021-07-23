@@ -1,8 +1,8 @@
 .twitter-button{
 
-    max-width: 380px;
+    width: 380px;
     min-width: 48px;
-    min-height: 48px;
+    height: 48px;
     border: none;
     border-radius: 9999px;
     margin-bottom: 20px;
@@ -26,5 +26,8 @@
     }
 }
 
-
-
+.drop-label {
+    font-size: 15px;
+    transform: translate(1px,-4px);
+    color: rgb(29,161,242);   
+}

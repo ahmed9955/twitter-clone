@@ -1,0 +1,31 @@
+.custom-input{
+    display: block;
+    width: 100%;
+    height: 58px;
+    margin-bottom: 25px;
+    background-color: transparent;
+    outline: none;
+    color: white;
+    border: 1px solid #2F3336;
+    border-radius: 4px;
+    padding: 10px;
+    &:focus{
+        border: 2px solid #1DA1F2;
+
+        & + label{
+           font-size: 12px;
+           top: -80px;
+           color: #1DA1F2;
+           transition: .2s all ease-in;        
+        }
+        
+    }
+}
+
+.label-input{
+    position: relative;
+    top: -68px;
+    left: 10px;
+    color: #2F3336;
+
+}
