@@ -4,16 +4,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faTwitter} from '@fortawesome/free-brands-svg-icons'
 import TwitterButton from '../components/twitter-button'
 import { FOOTERLINKS } from './footer-links'
+import { withRouter } from 'react-router'
+import { setModalVisibility } from '../../redux/modal/action'
+import { connect } from 'react-redux'
 
-const LandingPage = () => {
+const LandingPage = ({history,setModalVisibility}) => {
 
-    const [show, setShow] = useState(false);
+    const handleSignUpClick = () => {
 
-    const handleClick = () => {
-        setShow(true)
+        setModalVisibility(true)
+
+    }
+
+    const handleSignInClick = () => {
+        history.push('/login')
     }
         
         return(
+            
             <div className="landing-page">
                 <div className="landing-page-body">
                     <div className="landing-photo">
@@ -26,8 +34,8 @@ const LandingPage = () => {
                         <span className="landing-head">Happening now</span>
                         <p className="join-text">Join Twitter today.</p>
                         <div className="landing-buttons-container">
-                            <TwitterButton show={show} setShow={setShow} handleClick={handleClick} >Sign Up</TwitterButton>
-                            <TwitterButton outline="twitter-button-outline">Log In</TwitterButton>
+                            <TwitterButton  handleClick={handleSignUpClick} >Sign Up</TwitterButton>
+                            <TwitterButton outline="twitter-button-outline" handleClick={handleSignInClick}>Log In</TwitterButton>
                         </div>
                     </div>
                 </div>
@@ -41,4 +49,10 @@ const LandingPage = () => {
         )
     }
 
-export default LandingPage
+    const mapDispatchToProps = dispatch => ({
+        setModalVisibility: display => dispatch(setModalVisibility(display))
+        
+    })
+    
+
+export default  withRouter(connect(null, mapDispatchToProps)(LandingPage))

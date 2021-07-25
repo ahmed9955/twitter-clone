@@ -1,4 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
+import { connect } from 'react-redux';
+import { setModalVisibility, setPrivacyVisibility } from '../../../redux/modal/action';
 import { DAYS, MONTHES, YEARS } from '../birthData';
 import DropDownMenu from '../dropmenu';
 import Input from '../input';
@@ -6,18 +8,16 @@ import Modal from '../modal';
 import TwitterLargeButton from '../twitter-large-button';
 import PrivacyStep from './second-step';
 
-const SignUpData = ({show, setShow}) => {
+const SignUpData = ({setModalVisibility,setPrivacyVisibility,display}) => {
 
-    const [showPrivacy , setShowPrivacy] = useState(false)
-    
     const handleClick = () => {
-        setShow(false)
-        setShowPrivacy(true)
+        setModalVisibility(false)
+        setPrivacyVisibility(true)
     }
 
     return(
 
-        <Modal display={show} setDisplay = {setShow} title="Create your account" >
+        <Modal display={display}  title="Create your account" >
        
         <Input type='text' label='Name'/>
         <Input type='text' label='Email'/>
@@ -42,11 +42,22 @@ const SignUpData = ({show, setShow}) => {
             <TwitterLargeButton handleClick={handleClick} title='Next'/>
         </div>
        
-        <PrivacyStep show = {showPrivacy} setShow = {setShowPrivacy}  />
+        <PrivacyStep   />
  
     </Modal>
  
     )
 }
 
-export default SignUpData
+const mapStateToProps = state => ({
+    display: state.modal.display,
+})
+
+
+const mapDispatchToProps = dispatch => ({
+    setPrivacyVisibility: display => dispatch(setPrivacyVisibility(display)),
+    setModalVisibility: display => dispatch(setModalVisibility(display))
+    
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignUpData)

@@ -1,0 +1,12 @@
+$twitter-color : #1B95E0 ;
+
+.verification-link{
+    position:'relative'; 
+    top:'220px';
+    color: $twitter-color ;
+    
+    &:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}

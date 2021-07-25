@@ -1,0 +1,21 @@
+.sign-in-container{
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    
+}
+
+.input-container{
+    width: 334px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+#sign-page-links{
+    color: #1B95E0;
+    font-size: 15px;
+    & a:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}

@@ -14,7 +14,7 @@ const TwitterButton = ({children,outline,show,setShow,handleClick}) => {
         <button onClick={handleClick} className= {`twitter-button ${outline}`}>{children}</button>
         <SignUpData show = {show} setShow={setShow} />
 </>
-        )
+)
 }
 
 export default TwitterButton

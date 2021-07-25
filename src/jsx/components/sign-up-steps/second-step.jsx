@@ -1,20 +1,23 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Modal from '../modal'
 import '../../../styles/components/sign-up-steps/second-step.scss'
 import ConfirmSignUp from './third-step'
 import TwitterLargeButton from '../twitter-large-button'
+import { connect } from 'react-redux'
+import { setConfirmVisibility, setPrivacyVisibility } from '../../../redux/modal/action'
 
-const PrivacyStep = ({ show, setShow }) => {
+const PrivacyStep = ({ displayPrivacy,setPrivacyVisibility,setConfirmVisibility }) => {
 
-    const [showConfirmSignUp , setConfirmSignUp] = useState(false)
     const handleClick = () => {
-        setConfirmSignUp(true)
-        setShow(false)
+
+        setPrivacyVisibility(false)
+        setConfirmVisibility(true)    
     }    
+
     return(
         <>
 
-            <Modal display={show} setDisplay = {setShow} title="Customize your experience" >
+            <Modal display={ displayPrivacy } title="Customize your experience" >
                 <div style={{fontSize:'20px',fontWeight:'bold',color:'#D9D9D9',marginBottom:'20px',marginTop:'45px'}}>Track where you see Twitter content across the web</div>
                 
                 <span>Twitter uses this data to personalize your experience. This web browsing history will never be stored with your name, email, or phone number.</span>
@@ -31,7 +34,7 @@ const PrivacyStep = ({ show, setShow }) => {
                     <TwitterLargeButton handleClick={handleClick} title = 'Next' />
                 </div>
                 
-                <ConfirmSignUp showConfirmSignUp={showConfirmSignUp} setConfirmSignUp={setConfirmSignUp} />
+                <ConfirmSignUp  />
             
             </Modal> 
 
@@ -39,4 +42,17 @@ const PrivacyStep = ({ show, setShow }) => {
     )
 }
 
-export default PrivacyStep
+const mapStateToProps = state => ({
+    displayPrivacy: state.modal.displayPrivacy,
+})
+
+const mapDispatchToProps = dispatch => ({
+
+    setPrivacyVisibility: display => dispatch(setPrivacyVisibility(display)),
+    setConfirmVisibility: display => dispatch(setConfirmVisibility(display)),
+
+})
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PrivacyStep)

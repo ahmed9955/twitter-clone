@@ -1,15 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { connect } from 'react-redux'
+import { setConfirmVisibility, setVerificationVisibility } from '../../../redux/modal/action'
 import { DAYS, MONTHES, YEARS } from '../birthData'
 import DropDownMenu from '../dropmenu'
 import Input from '../input'
 import Modal from '../modal'
 import TwitterLargeButton from '../twitter-large-button'
+import VerificationCode from './forth-step'
 
-const ConfirmSignUp = ({showConfirmSignUp, setConfirmSignUp}) => {
+const ConfirmSignUp = ({ displayConfirm, setConfirmVisibility, setVerificationVisibility }) => {
+
+    const handleClick = () => {
+        setConfirmVisibility(false)
+        setVerificationVisibility(true)      
+    }
 
     return(
         <>
-            <Modal stepNumber="Step 3 of 5" display={showConfirmSignUp} setDisplay = {setConfirmSignUp} title="Create your account">
+            <Modal display={displayConfirm} stepNumber="Step 3 of 5"  title="Create your account">
             <Input type='text' label='Name'/>
             <Input type='text' label='Email'/>
 
@@ -32,12 +40,27 @@ const ConfirmSignUp = ({showConfirmSignUp, setConfirmSignUp}) => {
                 Privacy Options
             </p>
             <div style={{position:'relative', top:'-45px'}}>
-            <TwitterLargeButton title='Sign up' />
+            <TwitterLargeButton title='Sign up' handleClick={handleClick} />
             </div>
+            <VerificationCode   />
         </Modal>
-            
+
         </>
     )
 }
 
-export default ConfirmSignUp
+
+const mapStateToProps = state => ({
+
+    displayConfirm: state.modal.displayConfirm,
+
+})
+
+const mapDispatchToProps = dispatch => ({
+    
+    setConfirmVisibility: display => dispatch(setConfirmVisibility(display)),
+    setVerificationVisibility: display => dispatch(setVerificationVisibility(display))
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmSignUp)
