@@ -2,7 +2,7 @@
     display: block;
     width: 100%;
     height: 58px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     background-color: transparent;
     outline: none;
     color: white;
@@ -20,6 +20,7 @@
         }
         
     }
+
 }
 
 .label-input{
@@ -28,4 +29,29 @@
     left: 10px;
     color: #2F3336;
 
+}
+
+.errorColor{
+    display: block;
+    width: 100%;
+    height: 58px;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: transparent;
+    outline: none;
+    color: white;
+    border: 1px solid #A81B46;
+
+    & + label{
+        font-size: 12px;
+        top: -80px;
+        color: #A81B46;
+        transition: .2s all ease-in;        
+     }
+
+}
+
+.errorlabelColor{
+    color: #A81B46
 }

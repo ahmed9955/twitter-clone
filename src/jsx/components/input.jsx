@@ -3,11 +3,11 @@ import React from 'react'
 import '../../styles/components/custom-input.scss'
 
 
-const Input = ({type,label,handleChange}) => {
+const Input = ({type,label,handleChange,name,errorColor}) => {
     return(
         <>
-            <input className="custom-input" type={type} onChange={handleChange} />
-            <label className='label-input'>{label}</label>
+            <input  name={name} className={errorColor?'errorColor ':'custom-input'} type={type} onChange={handleChange} />
+            <label className= {errorColor?'errorlabelColor label-input':'label-input'}>{label}</label>
         </>
     )
 }
