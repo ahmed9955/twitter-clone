@@ -4,7 +4,8 @@ const INITIAL_STATE = {
     display: false,
     displayPrivacy: false,
     displayConfirm: false,
-    displayVerification: false
+    displayVerification: false,
+    twitterButtonActive: true
 }
 
 const modalReducer = (state = INITIAL_STATE, action) => {
@@ -30,6 +31,11 @@ const modalReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 displayVerification: action.payload
+            }
+        case types.SET_TWITTER_BUTTON_ACTIVE: 
+            return{
+                ...state,
+                twitterButtonActive: action.payload
             }
 
         default:

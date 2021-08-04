@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux';
-import { setModalVisibility, setPrivacyVisibility } from '../../../redux/modal/action';
+import { setModalVisibility, setPrivacyVisibility, setTwitterButtonActive } from '../../../redux/modal/action';
 import { DAYS, MONTHES, YEARS } from '../birthData';
 import DropDownMenu from '../dropmenu';
 import Input from '../input';
@@ -8,15 +8,15 @@ import Modal from '../modal';
 import TwitterLargeButton from '../twitter-large-button';
 import PrivacyStep from './second-step';
 import {checkUserExistense, register} from '../../../apiClient/user'
+import { setNewUser } from '../../../redux/user/action';
 
-const SignUpData = ({setModalVisibility,setPrivacyVisibility,display}) => {
+const SignUpData = ({setNewUser,setTwitterButtonActive,setModalVisibility,setPrivacyVisibility,display}) => {
 
     const [user, setUser] = useState({})
     const [errorVisibility, setErrorVisibility] = useState('hidden')
     const [errorColor, setErrorColor] = useState(false)
     const [errColor, setErrColor] = useState('#A81B46')
     const [errorValue, setErrorValue] = useState('')
-    const [buttonActive, setButtonActive] = useState(true)
 
     const handleClick = () => {
         
@@ -29,12 +29,13 @@ const SignUpData = ({setModalVisibility,setPrivacyVisibility,display}) => {
                 password: "123456789A@a",
                 profileName,
                 gender: "male",
-                birthDate: `${day}-${MONTHES.indexOf(month)}-${year}`
+                birthDate: `${day}-${MONTHES.indexOf(month)}-${year}`,
 }
-       register(newuser)
-
-       setModalVisibility(false)
-       setPrivacyVisibility(true)
+       
+      setNewUser(newuser)
+        // register(newuser)
+        setModalVisibility(false)
+        setPrivacyVisibility(true)
 
     }
 
@@ -72,9 +73,9 @@ const SignUpData = ({setModalVisibility,setPrivacyVisibility,display}) => {
 
         if (user.email && user.profileName && user.month && user.day && user.year ){          
             if(user.email.length != 0 && user.profileName.length != 0 && user.month.length != 0 && user.day.length != 0 && user.year.length != 0 ){
-                setButtonActive(false)
+                setTwitterButtonActive(false)
             }else{
-                setButtonActive(true)
+                setTwitterButtonActive(true)
             }
              
         }
@@ -108,7 +109,7 @@ const SignUpData = ({setModalVisibility,setPrivacyVisibility,display}) => {
         </div>  
        
         <div style={{position:'relative', top:'-22px'}}>      
-            <TwitterLargeButton active={buttonActive} handleClick={handleClick} title='Next'/>
+            <TwitterLargeButton  handleClick={handleClick} title='Next'/>
         </div>
        
         <PrivacyStep   />
@@ -125,8 +126,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPrivacyVisibility: display => dispatch(setPrivacyVisibility(display)),
-    setModalVisibility: display => dispatch(setModalVisibility(display))
-    
+    setModalVisibility: display => dispatch(setModalVisibility(display)),
+    setTwitterButtonActive: active => dispatch(setTwitterButtonActive(active)),
+    setNewUser: user => dispatch(setNewUser(user))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(SignUpData)

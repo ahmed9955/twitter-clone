@@ -19,3 +19,8 @@ export const setVerificationVisibility = (display) => ({
     type: types.SET_VERIFICATION_VISIBLITY,
     payload: display
 })
+
+export const setTwitterButtonActive = (active) => ({
+    type: types.SET_TWITTER_BUTTON_ACTIVE,
+    payload: active
+})
