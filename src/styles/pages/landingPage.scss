@@ -9,7 +9,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: black;
+    background-color: white;
 }
 
 .landing-page-body{
@@ -23,7 +23,7 @@
 .landing-photo{
     flex: 1;
     background-image: url('../../assets/twitter-backgrond.png');
-    color: white;
+    color: #ffff;
     font-size: 250px;
     display: flex;
     justify-content: center;
@@ -34,7 +34,7 @@
 
 .landing-details{
     flex: 1;
-    color: white;
+    color: black;
     padding-left: 40px;
     padding-top: 80px;
 }

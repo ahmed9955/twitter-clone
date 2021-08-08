@@ -22,7 +22,7 @@ const Modal = ({setModalVisibility,setPrivacyVisibility,setVerificationVisibilit
             <div className="modal-body" >
                 <span style={{fontSize:'20px',fontWeight:'bold'}}>{stepNumber}</span>
                 <div style={{textAlign:'center',fontSize:'35px',color:'white'}}><FontAwesomeIcon  icon={faTwitter}/></div>
-                <div style={{fontSize:'25px',fontWeight:'bold',color:'#D9D9D9',marginBottom:'20px'}}>{title}</div>
+                <div style={{fontSize:'25px',fontWeight:'bold',color:'#000',marginBottom:'20px'}}>{title}</div>
                 {children}
             </div>
         </div>,

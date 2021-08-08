@@ -2,6 +2,7 @@
     width: 100vw;
     height: 100vh;
     position: fixed;
+    
     .modal-overlay{
         position: absolute;
         width: 100%;
@@ -11,11 +12,11 @@
     }
     .modal-body {
         position: relative;
-        color: white;
+        color: black;
         padding: 30px;
         width: 600px;
         height: 590px;
-        background-color: black;
+        background-color: white;
         margin: 32px auto;
         z-index: 2000;
         border-radius: 15px;

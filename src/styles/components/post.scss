@@ -1,0 +1,28 @@
+.post-container{
+    width: 598px;
+    text-align: end;
+    padding-right: 10px;   
+    padding-top: 10px;    
+    & img{
+        cursor: pointer;
+    }
+}
+
+.post-content{
+    margin-bottom: 14px;
+    clear: both;
+    
+}
+
+.post-owner{
+    float:left;
+    margin-left: 10px;
+
+    & span{
+        position: relative;
+        top: -10px;
+        font-weight: bold;
+    }
+
+    
+}

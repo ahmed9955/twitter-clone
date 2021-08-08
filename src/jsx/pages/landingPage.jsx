@@ -7,12 +7,14 @@ import { FOOTERLINKS } from './footer-links'
 import { withRouter } from 'react-router'
 import { setModalVisibility } from '../../redux/modal/action'
 import { connect } from 'react-redux'
+import { sendVerificationCode } from '../../apiClient/user'
 
 const LandingPage = ({history,setModalVisibility}) => {
 
     const handleSignUpClick = () => {
 
         setModalVisibility(true)
+        // sendVerificationCode()
 
     }
 
@@ -24,11 +26,11 @@ const LandingPage = ({history,setModalVisibility}) => {
             
             <div className="landing-page">
                 <div className="landing-page-body">
-                    <div className="landing-photo">
-                        <FontAwesomeIcon icon={faTwitter}  />
+                    <div className="landing-photo" >
+                        <FontAwesomeIcon icon={faTwitter} />
                     </div>
                     <div className="landing-details">
-                        <div style={{fontSize:'35px',marginBottom:'55px'}}>
+                        <div style={{fontSize:'35px',marginBottom:'55px', color:'#1DA1F2'}}>
                             <FontAwesomeIcon icon={faTwitter}/>
                         </div>
                         <span className="landing-head">Happening now</span>

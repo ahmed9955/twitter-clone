@@ -8,19 +8,32 @@ import Modal from '../modal';
 import TwitterLargeButton from '../twitter-large-button';
 import PrivacyStep from './second-step';
 import {checkUserExistense, register} from '../../../apiClient/user'
-import { setNewUser } from '../../../redux/user/action';
+import { setNameCheck, setNewUser } from '../../../redux/user/action';
 
-const SignUpData = ({setNewUser,setTwitterButtonActive,setModalVisibility,setPrivacyVisibility,display}) => {
+class SignUpData extends React.Component {
 
-    const [user, setUser] = useState({})
-    const [errorVisibility, setErrorVisibility] = useState('hidden')
-    const [errorColor, setErrorColor] = useState(false)
-    const [errColor, setErrColor] = useState('#A81B46')
-    const [errorValue, setErrorValue] = useState('')
+    constructor(props) {
+        super(props)
+        this.state = ({
+            user : {},
+            errorVisibility: 'hidden',
+            errorColor: false,
+            errColor: '#A81B46',
+            errorValue: ''
+        })
+    }
 
-    const handleClick = () => {
-        
-       const {email, profileName,month, day, year } = user
+    // const [user, setUser] = useState({})
+    // const [errorVisibility, setErrorVisibility] = useState('hidden')
+    // const [errorColor, setErrorColor] = useState(false)
+    // const [errColor, setErrColor] = useState('#A81B46')
+    // const [errorValue, setErrorValue] = useState('')
+   
+    
+
+     handleClick = () => {
+
+       const {email, profileName,month, day, year } = this.state.user
          
 
         const newuser = {
@@ -32,74 +45,97 @@ const SignUpData = ({setNewUser,setTwitterButtonActive,setModalVisibility,setPri
                 birthDate: `${day}-${MONTHES.indexOf(month)}-${year}`,
 }
        
-      setNewUser(newuser)
-        // register(newuser)
-        setModalVisibility(false)
-        setPrivacyVisibility(true)
+        this.props.setNewUser(newuser)
+        this.props.setModalVisibility(false)
+        this.props.setPrivacyVisibility(true)
 
     }
 
-    const handleChange = async (e) => {
+     handleChange = async (e) => {
+   
+        let { name, value } = e.target
+        
+        
 
-        const { name, value } = e.target
+        await this.setState( prevState => ({
 
+            user: { 
+                ...prevState.user,      
+                [name]: value
+            }
+        }))
+
+        console.log(this.state.user)
+        
         if (name === 'email'){
             
             const error = await checkUserExistense(value)
             
             if (error.error){
-                setErrorVisibility('visible')
-                setErrorColor(true)
-                setErrColor('#A81B46')
-                setErrorValue(error.error)
 
+                this.setState({
+                    errorVisibility: 'visible',
+                    errorColor: true,
+                    errColor: '#A81B46',
+                    errorValue: error.error
+                })
+                
             } else{
-                setErrorVisibility('hidden')
-                setErrorColor(false)
-                setErrColor('#363E33')
-                setErrorValue(' ')
+
+                this.setState({
+                    setErrorVisibility: 'hidden',
+                    errorColor: false,
+                    errColor: '#363E33',
+                    errorValue: ' '
+                })
+
             }
 
             if(value == ''){
-                setErrorVisibility('hidden')
-                setErrorColor(false)
-                setErrColor('#363E33')
-                setErrorValue(' ')
+                this.setState({
+                    setErrorVisibility: 'hidden',
+                    errorColor: false,
+                    errColor: '#363E33',
+                    errorValue: ' '
+                })
             }
 
         }
+ 
+        
 
-        setUser(user => ({ ...user,[name]: value }) )
-
-        if (user.email && user.profileName && user.month && user.day && user.year ){          
-            if(user.email.length != 0 && user.profileName.length != 0 && user.month.length != 0 && user.day.length != 0 && user.year.length != 0 ){
-                setTwitterButtonActive(false)
-            }else{
-                setTwitterButtonActive(true)
+            if ( this.state.errorValue == ' ' && value.length != 0 && this.state.user.profileName && this.state.user.email && this.state.user.month  && this.state.user.day && this.state.user.year  ){
+                
+                    this.props.setTwitterButtonActive(false)
+                
+            } else {
+                this.props.setTwitterButtonActive(true)
             }
-             
+                
         }
-         
-    }
+    
+        
 
-
+    render(){
+        
+    const {nameCheck,setNameCheck,setNewUser,setTwitterButtonActive,setModalVisibility,setPrivacyVisibility,display} = this.props
+    
     return(
         <Modal display={display}  title="Create your account" >
 
-       
-        <Input name='profileName' type='text' label='Name' handleChange={handleChange} />
-        <Input  errorColor={errorColor} name='email' type='text' label='Email' handleChange={handleChange} />
-        <label style={{position:'relative',top:'-20px',left:'-28px',color: `${errColor}` ,fontSize:'15px', visibility:`${errorVisibility}`}}>{errorValue}</label>
+        <Input name='profileName'  type='text' label='Name' handleChange={this.handleChange} />
+        <Input  errorColor={this.state.errorColor}  name='email' type='text' label='Email' handleChange={this.handleChange} />
+        <label style={{position:'relative',top:'-20px',left:'-28px',color: `${this.state.errColor}` ,fontSize:'15px', visibility:`${this.state.errorVisibility}`}}>{this.state.errorValue}</label>
         {/* <Input name='password' type='password' label='Password' handleChange={handleChange} /> */}
        
-        <section style={{fontWeight:'bold'}}>Date of birth</section>
+        <div style={{fontWeight:'bold'}}>Date of birth</div>
        
         <p style={{color:'#3A3E42',fontSize:'15px'}}>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
        
         <div style={{display:'flex',flexDirection:'row'}}>
-            <DropDownMenu name='month' handleChange={handleChange} title='Month' flex = {3} data = {MONTHES} />
-            <DropDownMenu name="day" handleChange={handleChange} title='Day' flex = {1} data = {DAYS} />
-            <DropDownMenu name="year" handleChange={handleChange} title='Year' flex = {2} data = {YEARS} />
+            <DropDownMenu  name='month' handleChange={this.handleChange} title='Month' flex = {3} data = {MONTHES} />
+            <DropDownMenu  name="day" handleChange={this.handleChange} title='Day' flex = {1} data = {DAYS} />
+            <DropDownMenu  name="year" handleChange={this.handleChange} title='Year' flex = {2} data = {YEARS} />
         </div>
        
         <div style={{display:'flex',position:'relative',top:'-80px',left:'4px'}}>
@@ -109,7 +145,7 @@ const SignUpData = ({setNewUser,setTwitterButtonActive,setModalVisibility,setPri
         </div>  
        
         <div style={{position:'relative', top:'-22px'}}>      
-            <TwitterLargeButton  handleClick={handleClick} title='Next'/>
+            <TwitterLargeButton  handleClick={this.handleClick} title='Next'/>
         </div>
        
         <PrivacyStep   />
@@ -117,10 +153,11 @@ const SignUpData = ({setNewUser,setTwitterButtonActive,setModalVisibility,setPri
     </Modal>
  
     )
-}
+}}
 
 const mapStateToProps = state => ({
     display: state.modal.display,
+    nameCheck: state.user.nameCheck
 })
 
 
@@ -128,7 +165,8 @@ const mapDispatchToProps = dispatch => ({
     setPrivacyVisibility: display => dispatch(setPrivacyVisibility(display)),
     setModalVisibility: display => dispatch(setModalVisibility(display)),
     setTwitterButtonActive: active => dispatch(setTwitterButtonActive(active)),
-    setNewUser: user => dispatch(setNewUser(user))
+    setNewUser: user => dispatch(setNewUser(user)),
+    setNameCheck: check => dispatch(setNameCheck(check))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(SignUpData)

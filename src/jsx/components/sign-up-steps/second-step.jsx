@@ -18,7 +18,7 @@ const PrivacyStep = ({ displayPrivacy,setPrivacyVisibility,setConfirmVisibility 
         <>
 
             <Modal display={ displayPrivacy } title="Customize your experience" >
-                <div style={{fontSize:'20px',fontWeight:'bold',color:'#D9D9D9',marginBottom:'20px',marginTop:'45px'}}>Track where you see Twitter content across the web</div>
+                <div style={{fontSize:'20px',fontWeight:'bold',color:'#000',marginBottom:'20px',marginTop:'45px'}}>Track where you see Twitter content across the web</div>
                 
                 <span>Twitter uses this data to personalize your experience. This web browsing history will never be stored with your name, email, or phone number.</span>
                 
