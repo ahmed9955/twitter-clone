@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import './App.css';
 import LandingPage from './jsx/pages/landingPage';
 import SignIn from './jsx/pages/sign-in';
@@ -13,7 +13,12 @@ class App extends React.Component {
     <div className="App">
       
       <Switch>
-        <Route exact path='/' component={LandingPage} />
+        <Route exact path='/' >
+          {
+            localStorage.getItem('token') ? <Redirect to="/home"/> : <LandingPage />
+          }
+
+        </Route>
         <Route path='/login' component={SignIn} />,
         <Route path= '/home' component={UserMainPage} />
       </Switch>

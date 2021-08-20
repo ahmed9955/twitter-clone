@@ -20,6 +20,11 @@ export const setVerificationVisibility = (display) => ({
     payload: display
 })
 
+export const setResetPasswordVisibility = (display) => ({
+    type: types.SET_RESET_PASSWORD_VISIBILITY,
+    payload: display
+})
+
 export const setTwitterButtonActive = (active) => ({
     type: types.SET_TWITTER_BUTTON_ACTIVE,
     payload: active

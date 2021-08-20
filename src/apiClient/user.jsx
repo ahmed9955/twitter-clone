@@ -1,4 +1,4 @@
-const URL = "http://localhost:5000"
+const URL = "http://localhost:2000"
 
 export const register = async (raw) => {
   
@@ -72,5 +72,58 @@ export const ConfirmVerification = async (verificationCode,token) => {
   const code = await response.json()
 
   return code
+
+}
+
+
+export const login = async (email, password) => {
+
+  var raw = {
+    email,
+    password
+  };
+
+  var requestOptions = {
+ 
+    method: 'POST',
+    body: JSON.stringify(raw),
+    redirect: 'follow',
+    headers: { 
+      'Content-Type': 'application/json',
+     }
+  };
+
+ const response = await fetch(`${URL}/login`, requestOptions)
+ 
+ const loggedInUser = await response.json() 
+
+ console.log(loggedInUser)
+ 
+ return loggedInUser
+ 
+}
+
+
+export const UpdatePasswordAndGender = async (gender, password, token) => {
+ 
+  var raw = {
+    gender,
+    password
+  };
+
+var requestOptions = {
+  method: 'PATCH',
+  body: JSON.stringify(raw),
+  redirect: 'follow',
+  headers: { 
+    'Content-Type': 'application/json',
+    'Authorization': token 
+  }
+};
+
+const response = await fetch(`${URL}/me`, requestOptions)
+const update = await response.json()
+
+return update
 
 }

@@ -91,7 +91,7 @@ const ConfirmSignUp = ({ user,setNewUser,displayConfirm, setConfirmVisibility, s
                 <label className="drop-label" style={{flex:2}}>Year</label>
             </div>  
 
-            <p style={{color:'#cccc',position:'relative',top:'-40px'}}>
+            <p style={{color:'#000',position:'relative',top:'-40px'}}>
                 By signing up, you agree to the 
                 Terms of Service and 
                 Privacy Policy, including 

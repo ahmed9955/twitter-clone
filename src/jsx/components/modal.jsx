@@ -4,7 +4,7 @@ import ReactDom from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { connect } from 'react-redux'
-import { setConfirmVisibility, setModalVisibility, setPrivacyVisibility, setVerificationVisibility } from '../../redux/modal/action'
+import { setConfirmVisibility, setModalVisibility, setPrivacyVisibility, setResetPasswordVisibility, setVerificationVisibility } from '../../redux/modal/action'
 
 const Modal = ({setModalVisibility,setPrivacyVisibility,setVerificationVisibility,setConfirmVisibility,display,children,title, stepNumber}) => {
 
@@ -17,6 +17,7 @@ const Modal = ({setModalVisibility,setPrivacyVisibility,setVerificationVisibilit
                 setPrivacyVisibility(false)
                 setVerificationVisibility(false)
                 setConfirmVisibility(false)
+                setResetPasswordVisibility(false)
                 
                 }} />
             <div className="modal-body" >
@@ -36,8 +37,8 @@ const mapDispatchToProps = dispatch => ({
     setModalVisibility: display => dispatch(setModalVisibility(display)),
     setPrivacyVisibility: display => dispatch(setPrivacyVisibility(display)),
     setConfirmVisibility: display => dispatch(setConfirmVisibility(display)),
-    setVerificationVisibility : display => dispatch(setVerificationVisibility(display))
-
+    setVerificationVisibility : display => dispatch(setVerificationVisibility(display)),
+    setResetPasswordVisibility: display => dispatch(setResetPasswordVisibility(display))   
 })
 
 export default connect(null,mapDispatchToProps)(Modal)

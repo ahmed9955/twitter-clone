@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     displayPrivacy: false,
     displayConfirm: false,
     displayVerification: false,
+    displayResetPassword: false,
     twitterButtonActive: true
 }
 
@@ -37,7 +38,11 @@ const modalReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 twitterButtonActive: action.payload
             }
-
+        case types.SET_RESET_PASSWORD_VISIBILITY: 
+            return {
+                ...state,
+                displayResetPassword: action.payload
+            }
         default:
             return state;
     }

@@ -4,17 +4,20 @@ import Modal from '../modal'
 import TwitterLargeButton from '../twitter-large-button'
 import '../../../styles/components/sign-up-steps/forth-step.scss'
 import { connect } from 'react-redux'
-import { setTwitterButtonActive, setVerificationVisibility } from '../../../redux/modal/action'
+import { setResetPasswordVisibility, setTwitterButtonActive, setVerificationVisibility } from '../../../redux/modal/action'
 import { ConfirmVerification } from '../../../apiClient/user'
 import { withRouter } from 'react-router'
+import ResetPasswordAndGender from './fifth-step'
 
-const VerificationCode = ({ displayVerification,setVerificationVisibility, setTwitterButtonActive,twitterButtonActive,authToken,history }) => {
+const VerificationCode = ({ displayVerification,setVerificationVisibility, setTwitterButtonActive,twitterButtonActive,authToken, setResetPasswordVisibility }) => {
 
 
     const handleChange = async (e) => {
 
+       setTwitterButtonActive(false)
+  
        const code = await ConfirmVerification(e.target.value, authToken )
-
+    
         if(!code.success){
           setTwitterButtonActive(false)
         }else{
@@ -25,9 +28,15 @@ const VerificationCode = ({ displayVerification,setVerificationVisibility, setTw
 
 
     const handleClick = () => {
+
         setVerificationVisibility(false)
-        localStorage.setItem('token',authToken )
-        history.push('/home')
+
+        setResetPasswordVisibility(true)
+
+        setTwitterButtonActive(true)
+        
+        // localStorage.setItem('token',authToken )
+        // history.push('/login')
     }
 
     return(
@@ -39,24 +48,28 @@ const VerificationCode = ({ displayVerification,setVerificationVisibility, setTw
                     <a>Didn't receive email?</a>
                 </div>
                 <div style={{position:'relative',top:'220px'}} >
-                    <TwitterLargeButton   title="Finish" handleClick={handleClick} />
+                    <TwitterLargeButton   title="next" handleClick={handleClick} />
                 </div>
-                
+                <ResetPasswordAndGender />        
             </Modal>
         </>
     )
 }
 
 const mapStateToProps = state => ({
+
     displayVerification: state.modal.displayVerification,
     twitterButtonActive: state.modal.twitterButtonActive,
     authToken: state.user.token
+
 })
 
 const mapDispatchToProps = dispatch => ({
 
     setVerificationVisibility: display => dispatch(setVerificationVisibility(display)),
-    setTwitterButtonActive: active => dispatch(setTwitterButtonActive(active))
+    setResetPasswordVisibility: display => dispatch(setResetPasswordVisibility(display)),
+    setTwitterButtonActive: active => dispatch(setTwitterButtonActive(active)),
+    
 })
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(VerificationCode))
+export default connect(mapStateToProps,mapDispatchToProps)(VerificationCode)
