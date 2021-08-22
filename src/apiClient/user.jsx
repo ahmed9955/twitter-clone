@@ -1,4 +1,4 @@
-const URL = "http://localhost:2000"
+export const URL = "http://localhost:2000"
 
 export const register = async (raw) => {
   
@@ -127,3 +127,28 @@ const update = await response.json()
 return update
 
 }
+
+
+export const profile = async (token) => {
+
+
+  var requestOptions = {
+ 
+    method: 'GET',
+    redirect: 'follow',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': token
+     }
+  };
+
+ const response = await fetch(`${URL}/me`, requestOptions)
+ 
+ const currentUser = await response.json() 
+
+
+ return  currentUser
+ 
+}
+
+

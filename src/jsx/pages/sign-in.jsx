@@ -2,8 +2,9 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState} from 'react'
 import { connect } from 'react-redux'
-import { login } from '../../apiClient/user'
+import { login, profile } from '../../apiClient/user'
 import { setTwitterButtonActive } from '../../redux/modal/action'
+import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/sign-in.scss'
 import Input from '../components/input'
@@ -40,8 +41,10 @@ class SignIn extends React.Component {
         if( loggedInUser.error ){
             alert(loggedInUser.error)
         } else {
-            this.props.history.push('/home')
             localStorage.setItem('token', loggedInUser.token)
+            const currentUser = await profile(loggedInUser.token)
+            this.props.setNewUser(currentUser)
+            this.props.history.push('/home')
         }
     }
 
@@ -68,6 +71,7 @@ render(){
 
 const mapDispatchToProps = dispatch => ({
     setTwitterButtonActive: active => dispatch(setTwitterButtonActive(active)),
+    setNewUser: user => dispatch(setNewUser(user))
 })
 
 export default connect(null,mapDispatchToProps)(SignIn)
