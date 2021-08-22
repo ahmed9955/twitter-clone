@@ -17,3 +17,48 @@
     background-color: #CFD9DE;
 }
 
+.profile-picture-rounded{
+    width: fit-content;
+    position: relative;
+    top: -80px;
+    left: 8px;
+}
+
+.following{
+
+    & a{
+        margin-right: 25px;
+        text-decoration: none;
+        color: black;
+        &:hover{
+            border-bottom: 1px solid black;
+            color: black;
+        }
+        & span{
+            font-weight: bold;
+        }
+    }
+}
+
+.edit-profile{
+    float: right;
+    width: 120px;
+    height: 36px;
+    border: 2px solid #E6E7E7;
+    border-radius: 9999px;
+    text-align: center;
+    margin-top: 12px;
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 5px;
+    
+    &:hover{
+        background-color: #E6E7E7;
+        cursor: pointer;
+    }
+}
+
+.tweets-nav-bar{
+    
+}

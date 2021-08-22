@@ -26,3 +26,21 @@
 
     
 }
+
+.post-reactions{
+    width: 100%;
+    height: fit-content;
+    float: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    
+    & span:hover{
+        color: #36AAF2;
+        background-color: #D3E9F7;
+        border-radius: 50%;
+    }
+}

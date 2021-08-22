@@ -1,5 +1,9 @@
 import React from 'react'
 import '../../styles/components/post.scss'
+import { FavoriteBorder, CommentOutlined, ShareOutlined } from '@material-ui/icons';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const Post = () => {
 
@@ -19,6 +23,7 @@ const Post = () => {
                     width='500px'
                     style={{border: '1px solid #cccc',borderRadius:'20px'}}>
                 </img>
+
                 {/* <video
                     autoPlay
                     controls
@@ -27,6 +32,13 @@ const Post = () => {
                     width='500px'
                     style={{borderRadius:'20px'}}>
                 </video> */}
+                <div className = 'post-reactions'>
+                   <span><CommentOutlined /></span>
+                   <span><FontAwesomeIcon icon={faRetweet} /></span>
+                   <span><FavoriteBorder /></span>
+                   <span><ShareOutlined/> </span>
+
+                </div>
             </div>
         </>
     )
