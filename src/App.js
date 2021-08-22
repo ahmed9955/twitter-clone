@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import './App.css';
+import TweetsView from './jsx/components/tweets-view';
 import LandingPage from './jsx/pages/landingPage';
 import SignIn from './jsx/pages/sign-in';
 import UserMainPage from './jsx/pages/user-main-page';

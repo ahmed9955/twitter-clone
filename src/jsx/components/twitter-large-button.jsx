@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 
 import '../../styles/components/twitter-large-button.scss'
 
-const TwitterLargeButton = ({type,handleClick, title, buttonActive}) => {
+const TwitterLargeButton = ({type,handleClick, title, buttonActive, width}) => {
 
     return (
-    <button type={ type?type:"button"} disabled={buttonActive}  onClick={handleClick}  className = {!buttonActive?'twitter-button twitter-large-button':'twitter-large-button-disabled twitter-button'} >
+    <button style={{ width }} type={ type?type:"button"} disabled={buttonActive}  onClick={handleClick}  className = {!buttonActive?'twitter-button twitter-large-button':'twitter-large-button-disabled twitter-button'} >
     {title}
     </button>
     )

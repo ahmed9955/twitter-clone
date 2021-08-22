@@ -80,7 +80,7 @@ const CreatePost = () => {
                          
                     </div>    
                     <div className="tweet-button">
-                        <TwitterLargeButton type = 'submit'  title="Tweet" />
+                        <TwitterLargeButton width="150px" type = 'submit'  title="Tweet" />
                     </div>
                 </div>
                 </div>

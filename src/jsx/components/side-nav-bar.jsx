@@ -15,15 +15,15 @@ const SideNavBar = () => {
                     <a style={{color:'#1DA1F2'}}>
                         <FontAwesomeIcon  icon={faTwitter}/>
                         </a>
-                    <a><section><FontAwesomeIcon icon={faHome}/></section><span>Home</span></a>
-                    <a><section><FontAwesomeIcon icon={faHashtag}/></section><span>Explore</span></a>
-                    <a><section><FontAwesomeIcon icon={faBell}/></section><span>Notification</span></a>
-                    <a><section><FontAwesomeIcon icon={faEnvelope}/></section><span>Messages</span></a>
-                    <a><section><FontAwesomeIcon icon={faBookmark}/></section><span>Bookmarks</span></a>
-                    <a><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a>
-                    <a><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
-                    <a><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
-                    <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px' }}><TwitterLargeButton title="tweet"/></div>
+                    <a href="/home" ><section><FontAwesomeIcon icon={faHome}/></section><span>Home</span></a>
+                    <a href="/home/explore"><section><FontAwesomeIcon icon={faHashtag}/></section><span>Explore</span></a>
+                    <a href="/home/notification"><section><FontAwesomeIcon icon={faBell}/></section><span>Notification</span></a>
+                    <a href="/home/messages"><section><FontAwesomeIcon icon={faEnvelope}/></section><span>Messages</span></a>
+                    <a href="/home/bookmarks"><section><FontAwesomeIcon icon={faBookmark}/></section><span>Bookmarks</span></a>
+                    <a href="/home/lists"><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a>
+                    <a href="/home/profile"><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
+                    <a href="/home/more"><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
+                    <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton width="100%" title="tweet"/></div>
                 </nav>
                 <div className="account-owner">
                 <img
@@ -45,4 +45,5 @@ const SideNavBar = () => {
     )
     
 }
+
 export default SideNavBar

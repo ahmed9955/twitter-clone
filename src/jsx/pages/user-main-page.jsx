@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Route, Switch } from 'react-router'
 import { profile } from '../../apiClient/user'
 import { setTwitterButtonActive } from '../../redux/modal/action'
 import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/user-main-page.scss'
+import Profile from '../components/profile'
 import SideNavBar from '../components/side-nav-bar'
 import TweetsView from '../components/tweets-view'
 
@@ -27,7 +29,10 @@ render(){
         <>  
             <div style={{display:'flex',flexDirection:'row'}}>
                 <SideNavBar />
-                <TweetsView/> 
+                <Switch>
+                    <Route exact path = '/home' component={TweetsView} />
+                    <Route path = '/home/profile' component={Profile} />
+                </Switch> 
             </div>
         </>
     )
