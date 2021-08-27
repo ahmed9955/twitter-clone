@@ -5,7 +5,11 @@ export const createNewPost = async (content,file,fileName,token) => {
     let formdata = new FormData();
 
     formdata.append("content", content);
-    formdata.append("postPic", file, fileName);
+
+    if (file) {
+        formdata.append("postPic", file, fileName)
+    } 
+    
     
     var requestOptions = {
         method: 'POST',
@@ -20,4 +24,123 @@ export const createNewPost = async (content,file,fileName,token) => {
  const post = await response.json()
 
  console.log(post)
+}
+
+
+export const getUserPosts = async () => {
+    const requestOptions = {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        redirect: 'follow'
+      };
+      
+    const response = await fetch(`${URL}/post/me`, requestOptions)
+    const posts = await response.json()
+
+    return posts
+}
+
+export const setLikedPost = async (id) => {
+    
+    const requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        headers: {
+            'Authorization': localStorage.token
+        }
+      };
+      
+    const response = await fetch(`${URL}/like/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+}
+
+export const getPostLikes = async (id) => {
+    const requestOptions = {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        },
+        redirect: 'follow'
+      };
+      
+    const response = await fetch(`${URL}/post/${id}`, requestOptions)
+    const posts = await response.json()
+
+    return posts   
+
+}
+
+export const addReplay =  async (content, id) => {
+
+    var formdata = new FormData();
+    formdata.append("content", content);
+ 
+    // formdata.append("replayPic", file, fileName);
+
+    var requestOptions = {
+        method: 'POST',
+        headers:{
+
+            "Authorization": localStorage.token
+        },
+
+        body: formdata,
+        redirect: 'follow'
+
+};
+
+    const response = await fetch(`${URL}/replay/${id}`, requestOptions)
+    const result = await response.json()
+
+    console.log(result)
+}
+
+export const addComment =  async (content, id) => {
+    var formdata = new FormData();
+    formdata.append("content", content);
+ 
+    // formdata.append("replayPic", file, fileName);
+
+    var requestOptions = {
+        method: 'POST',
+        headers:{
+
+            "Authorization": localStorage.token
+        },
+
+        body: formdata,
+        redirect: 'follow'
+
+};
+
+    const response = await fetch(`${URL}/comment/${id}`, requestOptions)
+    const result = await response.json()
+
+    console.log(result)
+}
+
+
+export const Comments = async (id) => {
+
+    var requestOptions = {
+        method: 'GET',
+        headers:{
+
+            "Authorization": localStorage.token
+        },
+        redirect: 'follow'
+
+};
+
+    const response = await fetch(`${URL}/comment/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+
 }

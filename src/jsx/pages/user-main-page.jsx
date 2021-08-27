@@ -6,9 +6,11 @@ import { setTwitterButtonActive } from '../../redux/modal/action'
 import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/user-main-page.scss'
+import FollowPage from '../components/followPage'
 import Profile from '../components/profile'
 import SideNavBar from '../components/side-nav-bar'
 import TweetsView from '../components/tweets-view'
+import PostDetails from './post-details'
 
 class UserMainPage extends React.Component {
 
@@ -25,14 +27,22 @@ class UserMainPage extends React.Component {
     }
 
 render(){
+
     return(
         <>  
             <div style={{display:'flex',flexDirection:'row'}}>
-                <SideNavBar />
+                <div style={{ position:'fixed',zIndex:'20' }}>
+                 <SideNavBar />
+                </div>
+                <div style={{ position:'absolute',left:'280px' }}>
                 <Switch>
                     <Route exact path = '/home' component={TweetsView} />
                     <Route path = '/home/profile' component={Profile} />
-                </Switch> 
+                    <Route path = '/home/post_details' component={PostDetails}/>
+                    <Route exact path='/home/followers' component={FollowPage}  />
+                    <Route exact path='/home/following' component={FollowPage}  />
+                </Switch>
+            </div> 
             </div>
         </>
     )

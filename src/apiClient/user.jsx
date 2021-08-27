@@ -151,4 +151,40 @@ export const profile = async (token) => {
  
 }
 
+export const avatar = async (token) => {
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers:{
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  };
+  
+  const response = await fetch("http://localhost:2000/avatar", requestOptions)
+  const avatar = await response.json()
+
+  return avatar.avatar
+}
+
+export const uploadAvatar = async (file, fileName, token) => {
+  
+  var formdata = new FormData();
+
+  formdata.append("avatar", file, fileName);
+
+  var requestOptions = {
+    method: 'POST',
+    headers: {
+      "Authorization": token
+    },
+    body: formdata,
+    redirect: 'follow'
+};
+
+  const response = await fetch("http://localhost:2000/avatar", requestOptions)
+  const avatar = await response.json()
+
+  return avatar
+}
 

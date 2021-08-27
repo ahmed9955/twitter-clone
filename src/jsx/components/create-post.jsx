@@ -1,17 +1,30 @@
 import { faCalendarTimes, faClock, faGift, faGlobe, faHandPointDown, faPhoneSquareAlt, faPhotoVideo, faPoll, faSmile, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React ,{useState} from 'react'
+import React ,{useEffect, useState} from 'react'
+import { connect } from 'react-redux'
 import { createNewPost } from '../../apiClient/post'
+import { avatar } from '../../apiClient/user'
 import '../../styles/components/create-post.scss'
 import TwitterLargeButton from './twitter-large-button'
 
-const CreatePost = () => {
+const CreatePost = ({ userAvatar }) => {
 
     const [visible,setVisible] = useState(false)
     const [postPic, setPostPic] = useState('')
+    const [postVideo, setPostVideo] = useState('')
     const [uploadPostPic, setUploadPostPic] = useState('')
     const [fileName, setFileName] = useState('')
     const [postContent, setPostContent] = useState('')
+    const [avatarProfile, setAvatar] = useState('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
+
+    useEffect( async () => {
+            if (userAvatar.user){
+               return setAvatar(userAvatar.user.avatar)
+               
+            }
+                setAvatar('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
+            
+    })
 
     const handleFocus = () => {
         setVisible(true)    
@@ -19,14 +32,29 @@ const CreatePost = () => {
 
     const handlePostPic = (e) => {
 
-        setUploadPostPic(e.target.files[0])        
-        setFileName(e.target.files[0].name)
+  
+        if (e.target.files[0].type == 'video/mp4'){
+            // setPostVideo(e.target.files[0])
+            setPostPic('')
+            setUploadPostPic(e.target.files[0])        
+            setFileName(e.target.files[0].name)
+            let reader = new FileReader()
+            reader.readAsDataURL(e.target.files[0])
+            reader.onload =(e) => {
+                setPostVideo(e.target.result)
+            }    
 
-        let reader = new FileReader()
-        reader.readAsDataURL(e.target.files[0])
-        reader.onload =(e) => {
-            setPostPic(e.target.result)
+        } else {
+            setUploadPostPic(e.target.files[0])        
+            setFileName(e.target.files[0].name)
+            setPostVideo('')
+            let reader = new FileReader()
+            reader.readAsDataURL(e.target.files[0])
+            reader.onload =(e) => {
+                setPostPic(e.target.result)
+            }    
         }
+        
     }
     
     const handleSubmit = (e) => {
@@ -44,7 +72,7 @@ const CreatePost = () => {
             <form  onSubmit = {handleSubmit} className="create-post-container">
                 <div  className="post-content-input">
                 <img
-                    src="https://pbs.twimg.com/media/E7-UiXNXEAUVUTd?format=jpg&name=medium" 
+                    src={avatarProfile} 
                     height='48px' 
                     width='48px'
                     style={{border: '1px solid #cccc',borderRadius:'50%'}}>
@@ -63,12 +91,21 @@ const CreatePost = () => {
                     style={{border: '1px solid #cccc',borderRadius:'20px'}}>
                     </img>
                 }
-                    
+                {
+                    postVideo && 
+                <video
+                    controls
+                    src={postVideo}
+                    height='280px' 
+                    width='500px'
+                    style={{borderRadius:'20px', marginTop:'20px'}}>
+                </video> 
+                }   
 
                     <div className="post-controls">
                     <div className="post-control-icons">
                         <div>
-                            <input id="image-post" type='file' accept='image/*' style={{display:'none'}} onChange={handlePostPic}/>
+                            <input id="image-post" type='file' accept="audio/*,video/*,image/*" style={{display:'none'}} onChange={handlePostPic}/>
                             <label style={{cursor:'pointer'}} htmlFor="image-post">
                                 <FontAwesomeIcon icon={faPhotoVideo}/>
                             </label>
@@ -92,5 +129,8 @@ const CreatePost = () => {
     )
 }
 
+const mapStateToProps = (state) => ({
+    userAvatar: state.user
+})
 
-export default CreatePost
+export default connect(mapStateToProps)(CreatePost)

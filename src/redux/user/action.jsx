@@ -16,3 +16,13 @@ export const setNameCheck = (check) => ({
     payload: check
 
 })
+
+export const setMedia = (check) => ({
+    type: types.SET_MEDIA,
+    payload: check
+})
+
+export const setLikes = (check) => ({
+    type: types.SET_LIKES,
+    payload: check
+})

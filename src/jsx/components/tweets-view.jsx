@@ -9,7 +9,7 @@ const TweetsView = () => {
         <>
             <div className='tweets-container'>
                 <CreatePost />
-                <Post/>  
+                {/* <Post/>   */}
             </div>
         </>
     )

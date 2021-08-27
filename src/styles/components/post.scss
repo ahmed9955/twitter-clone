@@ -6,12 +6,21 @@
     & img{
         cursor: pointer;
     }
+
+    &:hover{
+        background: #F7F7F7;
+        cursor: pointer;
+    }
 }
 
 .post-content{
     margin-bottom: 14px;
     clear: both;
-    
+    display: block;
+    border: none;
+    outline: none;
+    padding: 20px; 
+    width: 100%;
 }
 
 .post-owner{

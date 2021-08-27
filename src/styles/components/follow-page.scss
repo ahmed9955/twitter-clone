@@ -1,0 +1,33 @@
+.follow-nav-bar{
+
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items: center;
+    width: 50vw;
+    height: 60px;
+    border-bottom: 2px solid #E6E7E7;
+
+
+    & a{
+        flex:1;
+        text-decoration: none;
+        color: black;
+        width: 90px;
+        text-align: center;
+        font-weight: bold;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover{
+            background-color: #E6E7E7;
+            cursor: pointer;
+        }
+    }
+}
+
+
+.nav-focus{
+    border-bottom: 3px solid #1D9BF0;
+}

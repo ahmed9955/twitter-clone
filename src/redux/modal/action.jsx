@@ -25,7 +25,22 @@ export const setResetPasswordVisibility = (display) => ({
     payload: display
 })
 
+export const setTwitterReplayVisibility = (display) => ({
+    type: types.SET_TWITTER_REPLAY_VISIBILITY,
+    payload: display
+})
+
 export const setTwitterButtonActive = (active) => ({
     type: types.SET_TWITTER_BUTTON_ACTIVE,
     payload: active
+})
+
+export const setReplayContent = (content) => ({
+    type: types.SET_REPLAY_CONTENT,
+    payload: content
+})
+
+export const setPostDetails = (details) => ({
+    type: types.SET_POST_DETAILS,
+    payload: details
 })

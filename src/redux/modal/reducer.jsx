@@ -6,8 +6,27 @@ const INITIAL_STATE = {
     displayConfirm: false,
     displayVerification: false,
     displayResetPassword: false,
-    twitterButtonActive: true
+    displayReplayVisibility:false,
+    twitterButtonActive: true,
+    postDetails: {
+
+        id:'', 
+        content:'', 
+        media: '' ,
+        likes:'',
+        profileName:'',
+        avatar:'',
+        comments:''
+    
+    },
+    replayContent:{
+        
+        post_id: '',
+        post_content: '',
+        
+    },
 }
+
 
 const modalReducer = (state = INITIAL_STATE, action) => {
 
@@ -43,6 +62,22 @@ const modalReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 displayResetPassword: action.payload
             }
+        case types.SET_TWITTER_REPLAY_VISIBILITY: 
+            return {
+                ...state,
+                displayReplayVisibility: action.payload
+            }
+        case types.SET_REPLAY_CONTENT:
+            return {
+                ...state,
+                replayContent: action.payload
+            }    
+        case types.SET_POST_DETAILS:
+            return {
+                ...state,
+                postDetails: action.payload
+            }    
+
         default:
             return state;
     }

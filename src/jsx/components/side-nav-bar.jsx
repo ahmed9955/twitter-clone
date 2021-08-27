@@ -1,13 +1,28 @@
 import { faCriticalRole, faEvernote, faGgCircle, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faAdjust, faBell, faBookmark, faBookReader, faCommentDots, faDotCircle, faEnvelope, faHashtag, faHome, faInfoCircle, faList, faNotesMedical, faSearch, faThList, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { avatar } from '../../apiClient/user'
 
 import '../../styles/components/side-nav-bar.scss'
 import TwitterLargeButton from './twitter-large-button'
 
 const SideNavBar = () => {
+    
+    const [avatarPro, setAvatarProfile] = useState('')
+
+    useEffect(async () => {
+        
+        const avatarProfile = await  avatar(localStorage.token)
+        if (avatarProfile){
+            setAvatarProfile(avatarProfile) 
+            
+        } else {
+            setAvatarProfile('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
+        }
+    })
+
     return(
         <>
             <div className="side-navbar-container">
@@ -27,7 +42,7 @@ const SideNavBar = () => {
                 </nav>
                 <div className="account-owner">
                 <img
-                    src="https://pbs.twimg.com/media/E7-UiXNXEAUVUTd?format=jpg&name=medium" 
+                    src={avatarPro} 
                     height='48px' 
                     width='48px'
                     style={{border: '1px solid #cccc',borderRadius:'50%'}}>

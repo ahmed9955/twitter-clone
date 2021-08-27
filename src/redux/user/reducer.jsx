@@ -3,7 +3,9 @@ import { types } from "./user-type";
 const INITIAL_STATE = {
     user: null,
     token: '',
-    nameCheck: false
+    nameCheck: false,
+    media:'nav-focus',
+    likes:''
 }
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -24,7 +26,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 nameCheck: action.payload
             }
-
+        case types.SET_MEDIA :
+            return {
+                ...state,
+                media: action.payload
+            }
+        case types.SET_LIKES: 
+            return {
+                ...state,
+                likes: action.payload
+            }    
         default:
             return state;
     }

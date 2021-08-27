@@ -60,5 +60,47 @@
 }
 
 .tweets-nav-bar{
-    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    height: 40px;
+    padding-top: 10px;
+    & a {
+        text-decoration: none;
+        color: #677681;
+        flex: 1;
+        text-align: center;
+        &:hover{
+            background-color: #E6E7E7;
+            color: #677681;
+        }
+    }
 }
+
+.nav-focus{
+    border-bottom: 4px solid #1A92DC;
+    color: black;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

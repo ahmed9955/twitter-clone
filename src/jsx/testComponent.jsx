@@ -28,7 +28,6 @@ class Form extends React.Component {
           .then(response => response.json())
           .then(result => console.log(result))
           .catch(error => console.log('error', error))
-
     }
 
     render() {
@@ -36,8 +35,10 @@ class Form extends React.Component {
         <div>
           <form >
             
-            <input onChange={ (e) => this.setState({ input : e.target.files[0] })} id = 'im-empty' type="file" accept='image/*' name="im-empty" />
+            <input onChange={ (e) => this.setState({ input : e.target.files[0] })} id = 'im-empty' type="file" accept='video/*' name="im-empty" />
+        
           </form>
+
           <button onClick={() => this.send()}>Send</button>
         </div>
       );
