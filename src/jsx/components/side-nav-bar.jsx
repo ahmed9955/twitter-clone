@@ -2,15 +2,17 @@ import { faCriticalRole, faEvernote, faGgCircle, faTwitter } from '@fortawesome/
 import { faAdjust, faBell, faBookmark, faBookReader, faCommentDots, faDotCircle, faEnvelope, faHashtag, faHome, faInfoCircle, faList, faNotesMedical, faSearch, faThList, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { avatar } from '../../apiClient/user'
+import { Link, withRouter } from 'react-router-dom'
+import { avatar, logOut } from '../../apiClient/user'
 
 import '../../styles/components/side-nav-bar.scss'
 import TwitterLargeButton from './twitter-large-button'
 
-const SideNavBar = () => {
+const SideNavBar = ({history}) => {
     
     const [avatarPro, setAvatarProfile] = useState('')
+
+    const [displayLogout, setDisplayLogout] = useState(false)
 
     useEffect(async () => {
         
@@ -22,6 +24,15 @@ const SideNavBar = () => {
             setAvatarProfile('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
         }
     })
+
+    const handleLogOutClick = async () => {
+
+        const response = await logOut()
+        if (response){
+            localStorage.removeItem('token')
+            history.push('/')
+        }
+    }
 
     return(
         <>
@@ -40,20 +51,21 @@ const SideNavBar = () => {
                     <a href="/home/more"><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
                     <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton width="100%" title="tweet"/></div>
                 </nav>
-                <div className="account-owner">
+                <div className="account-owner" onClick={() => setDisplayLogout(!displayLogout)}>
                 <img
                     src={avatarPro} 
                     height='48px' 
                     width='48px'
                     style={{border: '1px solid #cccc',borderRadius:'50%'}}>
                 </img>
-                <div className='account-name'>
+                <div className='account-name' >
                     <span>User Name</span>
                     <span>@Hashtag for user</span>
                 </div>
                 <div>
                     <FontAwesomeIcon icon={faInfoCircle}/>
                 </div>
+                    <div className="logout" onClick={handleLogOutClick} style={{ visibility: displayLogout?'visible':'hidden' }}><span>logOut @account name</span></div>
                 </div>
             </div>            
         </>
@@ -61,4 +73,4 @@ const SideNavBar = () => {
     
 }
 
-export default SideNavBar
+export default withRouter(SideNavBar)

@@ -21,10 +21,12 @@ const ConfirmSignUp = ({ user,setNewUser,displayConfirm, setConfirmVisibility, s
     const handleClick = async () => {
         
         const token =  await register(user)
+        
         setConfirmVisibility(false)
         setVerificationVisibility(true)
         setAuthToken(token.token)
         setTwitterButtonActive(true)
+
     }
 
 

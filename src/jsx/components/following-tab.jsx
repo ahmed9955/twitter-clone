@@ -1,11 +1,12 @@
 import React from 'react'
+import FollowComponent from './follow-component'
 
 const FollowingTab = () => {
 
     return(
         <>
             <div>
-                following
+                <FollowComponent/>
             </div>
         </>
     )

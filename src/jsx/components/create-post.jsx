@@ -60,7 +60,8 @@ const CreatePost = ({ userAvatar }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         createNewPost(postContent,uploadPostPic,fileName,localStorage.getItem('token'))      
-}
+    
+    }
 
    const handleChange = (e) => {
         

@@ -12,9 +12,11 @@ export const register = async (raw) => {
     
     const response = await fetch(`${URL}/register`, requestOptions)
     const user = await response.json()
+    console.log(user)
     if(user.token){
-    sendVerificationCode(user.token)
+      sendVerificationCode(user.token)
     }
+    
     return {
             ...user.response,
             token:user.token
@@ -188,3 +190,35 @@ export const uploadAvatar = async (file, fileName, token) => {
   return avatar
 }
 
+
+export const logOut = async () => {
+  
+  const requestOptions = {
+    method: 'POST',
+    redirect: 'follow',
+    headers:{
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.token
+    }
+  };
+  
+  const response = await fetch(`${URL}/me/logout`, requestOptions)
+  const result = await response.json()
+  
+  return result
+}
+
+export const whoToFollow = async () => {
+  var requestOptions = {
+    method: 'GET',
+    headers: { 
+      'Content-Type': 'application/json' ,
+      'Authorization': localStorage.token
+    },
+    redirect: 'follow',
+  };
+
+  const response = await fetch(`${URL}/users/whotofollow`, requestOptions)
+  const user = await response.json()
+  // console.log(user)
+}

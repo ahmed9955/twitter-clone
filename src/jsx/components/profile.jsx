@@ -7,6 +7,7 @@ import { getUserPosts } from '../../apiClient/post'
 import { avatar, profile, uploadAvatar } from '../../apiClient/user'
 import { setLikes, setMedia } from '../../redux/user/action'
 import '../../styles/components/profile.scss'
+import FollowComponent from './follow-component'
 import Likes from './likes'
 import Media from './media'
 import Tweets from './tweets'
@@ -52,7 +53,8 @@ class Profile extends React.Component {
 render() {
     return(
         <>
-            <div className='profile-container'>
+        <div style={{display:'flex',flexDirection:'row',width:'78vw'}}>
+            <div className='profile-container' style={{flex:'2'}}>
                 <div className='profile-navbar'>
 
                 </div>
@@ -117,6 +119,13 @@ render() {
                     </Switch>
                 </div>
             </div>
+            <div style = {{flex:'1',paddingLeft:'20px'}}>
+                    <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
+                        <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
+                        <FollowComponent />
+                    </div>
+            </div>
+        </div>    
         </>
     )
 }}
