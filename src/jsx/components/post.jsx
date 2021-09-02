@@ -69,6 +69,7 @@ class Post extends React.Component {
     }
 
     handleLike = async (e) => {
+
         e.stopPropagation();
 
         
