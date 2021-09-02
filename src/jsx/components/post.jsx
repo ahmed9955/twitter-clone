@@ -5,61 +5,107 @@ import { faRetweet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setPostDetails, setReplayContent, setTwitterReplayVisibility } from '../../redux/modal/action';
 import { connect } from 'react-redux';
-import { setLikedPost } from '../../apiClient/post';
+import { setLikedPost, setDisLikedPost } from '../../apiClient/post';
 import { withRouter } from 'react-router';
+import { render } from '@testing-library/react';
+import { profile } from '../../apiClient/user';
+import commentModal from './comment-modal';
 
+// { profileName,avatar,history,setPostDetails,setReplayContent,user_id,setTwitterReplayVisibility,content,media,likes,comments,id}
 
-const Post = ({ profileName,avatar,history,setPostDetails,setReplayContent,user_id,setTwitterReplayVisibility,content,media,likes,comments,id}) => {
+class Post extends React.Component {
 
-    const [liked, setLiked] = useState(false)
-    const [likesNum, setLikesNum] = useState(likes?likes.length:'')
-    const [commentsNum, setCommentsNum] = useState(comments?comments.length:'')
+    constructor(){
+        super()
+        this.state = {
+            flag: false,
+            liked: false,
+            likesNum: '',
+            commentsNum:'',
+            likesNumText:0,
+            commentsNum:0
+        }
+    }
+
+   async  componentDidMount(){
+
+        const user = await profile(localStorage.token)
+            
+        await this.setState({likesNum: this.props.likes})
+        await this.setState({commentsNum: this.props.comments.length})
+        await this.setState({likesNumText: this.state.likesNum.length})
+
+        if (this.props.user_id.user){
+            if (this.state.likesNum.length !== 0){
+                if (user){
+                    const checkUser =  this.state.likesNum.includes(user._id)
+                    if(checkUser){
+                        await this.setState({liked: true})
+                }
+                
+        }
+}}
+
+}
     
+    handleIncreaseComments = async () => {
 
-    useEffect(() => {
+        await this.setState({commentsNum: this.props.comments.length+1})
+    
+    }    
 
-        if (user_id.user){
-
-            if(likes){
-            const checkUser =  likes.includes(user_id.user._id)
-            if(checkUser){
-            setLiked(true)
-            }
-        }}
-       
-    })
-
-
-    const handleComment = (e) => {
+    handleComment = (e) => {
 
         e.stopPropagation();
+        const {content,id} = this.props
+        
+        this.props.setTwitterReplayVisibility(true)
 
-        setTwitterReplayVisibility(true)
-
-        setReplayContent({
+        this.props.setReplayContent({
             post_id: id,
             post_content: content
         })
 
     }
 
-    const handleLike = async (e) => {
+    handleLike = async (e) => {
         e.stopPropagation();
 
-        const like = await setLikedPost(id)
-        if (like){
-
-            setLiked(true)
-            setLikesNum(likes.length+1)
-            console.log(like)
         
-        }
+        const like = await setLikedPost(this.props.id)
+
+        if (like.like){
+
+            await this.setState({liked: true})
+            await this.setState({likesNumText: this.state.likesNum.length+1})
+
+        } else{
+
+            const dislike = await setDisLikedPost(this.props.id)
+            if (dislike.success){
+                console.log(dislike)
+                await this.setState({liked: false})
+                await this.setState({likesNumText: this.state.likesNum.length-1 == -1 ?0:this.state.likesNum.length-1})
+              
+            }}
+
+       
 
     }
 
-    const handlePostClick = () => {
-        history.push(`/home/post_details`)
-        setPostDetails({
+    handlePostClick = () => {
+        this.props.history.push(`/home/post_details`)
+        const {
+
+            id, 
+            content, 
+            media,
+            likes,
+            profileName,
+            avatar,
+            comments
+        } = this.props
+        this.props.setPostDetails({
 
             id, 
             content, 
@@ -71,9 +117,13 @@ const Post = ({ profileName,avatar,history,setPostDetails,setReplayContent,user_
         })
     }
 
+    
+render(){
+
+ const { profileName,avatar,history,setPostDetails,setReplayContent,user_id,setTwitterReplayVisibility,content,media,likes,comments,id} = this.props
     return(
         <>
-            <div  className="post-container" onClick={handlePostClick}>
+            <div  className="post-container" onClick={this.handlePostClick}>
                 <div className="post-owner">
                     <img style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
                     <span>{profileName}</span>
@@ -105,17 +155,16 @@ const Post = ({ profileName,avatar,history,setPostDetails,setReplayContent,user_
                 }
 
                 <div style={{marginBottom:'20px'}} className = 'post-reactions'>
-                   <span onClick={handleComment}><CommentOutlined />{commentsNum}</span>
+                   <span onClick={this.handleComment}><CommentOutlined />{this.state.commentsNum}</span>
                    <span><FontAwesomeIcon icon={faRetweet} /> 1</span>
-                   <span style = {{ color : liked  ?'#E44D77': 'black'}} onClick={handleLike}>{ liked ?<FavoriteRounded/>:<FavoriteBorder />}<section>{likesNum}</section></span>
-                   <span ><ShareOutlined/>1</span>
-                   {/* <CommentModal post_content={content} post_id={id}  /> */}
-                   
+                   <span style = {{ color : this.state.liked  ?'#E44D77': 'black'}} onClick={this.handleLike} >{ this.state.liked ?<FavoriteRounded/>:<FavoriteBorder />}<section>{this.state.likesNumText}</section></span>
+                   <span ><ShareOutlined/>0</span>
+                   <commentModal  post_content={content} post_id={id}  />
                 </div>
             </div>
         </>
     )
-}
+}}
 
 const mapStateToProps = state => ({
     user_id: state.user

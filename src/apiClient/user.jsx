@@ -208,17 +208,3 @@ export const logOut = async () => {
   return result
 }
 
-export const whoToFollow = async () => {
-  var requestOptions = {
-    method: 'GET',
-    headers: { 
-      'Content-Type': 'application/json' ,
-      'Authorization': localStorage.token
-    },
-    redirect: 'follow',
-  };
-
-  const response = await fetch(`${URL}/users/whotofollow`, requestOptions)
-  const user = await response.json()
-  // console.log(user)
-}

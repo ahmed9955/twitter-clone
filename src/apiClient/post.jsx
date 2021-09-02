@@ -59,6 +59,22 @@ export const setLikedPost = async (id) => {
     return result
 }
 
+export const setDisLikedPost = async (id) => {
+    
+    const requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        headers: {
+            'Authorization': localStorage.token
+        }
+      };
+      
+    const response = await fetch(`${URL}/dislike/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+}
+
 export const getPostLikes = async (id) => {
     const requestOptions = {
         method: 'GET',

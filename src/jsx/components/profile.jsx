@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch, withRouter } from 'react-router'
+import { whoToFollow } from '../../apiClient/follow'
 import { getUserPosts } from '../../apiClient/post'
 import { avatar, profile, uploadAvatar } from '../../apiClient/user'
 import { setLikes, setMedia } from '../../redux/user/action'
@@ -20,16 +21,20 @@ class Profile extends React.Component {
         this.state = {
             avatarProfile:'',
             userPosts:[],
-            current_user:{}
+            current_user:{},
+            followers:[]
         }
     }
 
     async componentDidMount() {
      
         //fetch user profile
-
         const response = await profile(localStorage.token)
         this.setState({current_user: response})
+
+        //fetch whotofollow
+        const whotofollow = await whoToFollow()
+        this.setState({followers: whotofollow})
 
         //fetch avatar profile
         const result = await avatar(localStorage.token)
@@ -111,7 +116,7 @@ render() {
                 <div style={{ height:'440px' }}>
 
                     <Switch>
-                        <Route exact path="/home/profile" component = {Tweets} />
+                        <Route exact path="/home/profile" component={Tweets} />
                         <Route path="/home/profile/withReplays" component={TweetsAndReplies} />
                         <Route path="/home/profile/media" component={Media} />
                         <Route path="/home/profile/withLikes" component={Likes} />
@@ -122,7 +127,7 @@ render() {
             <div style = {{flex:'1',paddingLeft:'20px'}}>
                     <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
-                        <FollowComponent />
+                        {this.state.followers.map(user => <FollowComponent  {...user}  />)}
                     </div>
             </div>
         </div>    

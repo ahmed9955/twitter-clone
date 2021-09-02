@@ -36,15 +36,17 @@ render(){
            
           }
         </div>
-          <CommentModal />   
 
+          <CommentModal post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
+        
         </>
     )
 }
 }
 
 const mapStateToProps = (state) => ({
-    postDetails: state.modal.postDetails
+    postDetails: state.modal.postDetails,
+    replayContent: state.modal.replayContent
 })
 
 export default connect(mapStateToProps)(PostDetails)

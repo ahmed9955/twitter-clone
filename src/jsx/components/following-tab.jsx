@@ -1,15 +1,42 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { following } from '../../apiClient/follow'
 import FollowComponent from './follow-component'
 
-const FollowingTab = () => {
+class FollowingTab extends React.Component {
 
+    constructor(){
+        super()
+        this.state = {
+            following: []
+        }
+    }
+
+    async componentDidMount(){
+    
+       const followings = await following()
+       await this.setState({ following: followings})
+       console.log(this.state.following)
+       
+    }
+
+
+render(){
     return(
         <>
             <div>
-                <FollowComponent/>
+                {
+                    this.state.following.map(user => <FollowComponent {...user} followType = "following" />)
+                }
+                
             </div>
         </>
     )
-}
+}}
 
-export default FollowingTab
+const mapStateToProps = (state) => ({
+    user: state.user.user
+})
+
+
+export default connect(mapStateToProps)(FollowingTab)

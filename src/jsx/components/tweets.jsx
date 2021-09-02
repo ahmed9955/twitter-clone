@@ -16,7 +16,7 @@ class Tweets extends React.Component {
     async componentDidMount(){
         const posts = await getUserPosts()
         this.setState({userPosts: posts})
-
+        
     }
         
 
