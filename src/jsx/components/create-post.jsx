@@ -88,8 +88,8 @@ const CreatePost = ({ userAvatar }) => {
                     <img
                     src={postPic} 
                     height='280px' 
-                    width='500px'
                     style={{border: '1px solid #cccc',borderRadius:'20px'}}>
+                    width='500px'
                     </img>
                 }
                 {

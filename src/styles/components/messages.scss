@@ -1,0 +1,138 @@
+.chat-container{
+    width: 78vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    & .messages-view, .users-view{
+        height: inherit;
+    }
+
+    & .messages-view{
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+
+        & .shared-messages, .send-message{
+            width: inherit;
+            
+        }
+        & .shared-messages {
+            flex: 8;
+            background-color: #ffff;
+            margin-top: 5px;
+            
+            & .reciever-account{
+                width: inherit;
+                height: 68px;
+                padding: 12px;
+                margin-right: 5px;
+                font-size: 18px;
+                border-radius: 10px;
+                border: 2px solid #1991DA;
+
+                & span{
+                    position: relative;
+                    top: -5px
+                }
+
+                & img{
+                    border: 1px solid #cccc;
+                    border-radius: 50%;
+                    height: 48px; 
+                    width:48px;
+                    margin-right: 20px;
+                }
+                
+            }
+
+            .message-history{
+                width: 100%;
+                min-height: 88%;
+                max-height:500px ;
+                margin-top: 5px;
+                padding: 20px;
+                overflow-y: scroll;
+                & .reciever-account{
+                    width: fit-content;
+                    height: fit-content;
+                    display: flex;
+                    background-color: #E7E9EB;
+                    padding: 12px;
+                    margin-bottom: 15px;
+                    margin-right: 5px;
+                    font-size: 18px;
+                    border-radius: 20px;
+    
+                    & span{
+                        position: relative;
+                        top: -5px
+                    }
+    
+                    & img{
+                        border: 1px solid #cccc;
+                        border-radius: 50%;
+                        height: 48px; 
+                        width:48px;
+                        margin-right: 20px;
+                    }    
+         
+                }
+            }
+        }
+
+        & .send-message {
+            flex: 1;
+
+            & .write-text-message{
+                width: 98%;
+                height: 80%;
+                border-radius: 999px;
+                border: 2px solid #1991DA;
+                margin: 5px;
+                background-color: #E7E9EB;
+                font-size: 20px;
+                color: #1991DA;
+                padding-right: 5px;
+                & input {
+                    width: 95%;
+                    height: 100%;
+                    padding: 10px;
+                    outline: none;
+                    border: none;
+                    border-radius: 999px;
+                }
+            }
+        }
+    }
+                    
+    & .users-view{
+        flex: 1;
+        border: 1px solid #cccc;
+
+        & .reciever-account{
+            width: inherit;
+            height: 68px;
+            padding: 12px;
+            margin-right: 5px;
+            font-size: 20px;
+            padding-left: 25px;
+
+            & img{
+                border: 1px solid #cccc;
+                border-radius: 50%;
+                height: 50px; 
+                width:50px;
+                margin-right: 20px;
+            }
+
+            &:hover{
+                background-color: #E7E9EB;
+                cursor: pointer;
+            }
+        }
+
+}
+}

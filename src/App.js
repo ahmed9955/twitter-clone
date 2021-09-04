@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
+import SocketIo from './apiClient/socket-io';
 import './App.css';
 import TweetsView from './jsx/components/tweets-view';
 import LandingPage from './jsx/pages/landingPage';
@@ -23,7 +24,7 @@ class App extends React.Component {
         <Route path='/login' component={SignIn} />,
         <Route path= '/home' component={UserMainPage} />
       </Switch>
-      
+      {/* <SocketIo /> */}
     
     </div>
     )

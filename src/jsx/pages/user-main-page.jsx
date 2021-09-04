@@ -7,6 +7,7 @@ import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/user-main-page.scss'
 import FollowPage from '../components/followPage'
+import Messages from '../components/messages'
 import Profile from '../components/profile'
 import SideNavBar from '../components/side-nav-bar'
 import TweetsView from '../components/tweets-view'
@@ -34,9 +35,10 @@ render(){
                 <div style={{ position:'fixed',zIndex:'20' }}>
                  <SideNavBar />
                 </div>
-                <div style={{ position:'absolute',left:'280px' }}>
+                <div style={{ position:'absolute',left:'285px' }}>
                 <Switch>
                     <Route exact path = '/home' component={TweetsView} />
+                    <Route exact path = '/home/messages' component={Messages} />
                     <Route path = '/home/profile' component={Profile} />
                     <Route path = '/home/post_details' component={PostDetails}/>
                     <Route exact path='/home/followers' component={FollowPage}  />

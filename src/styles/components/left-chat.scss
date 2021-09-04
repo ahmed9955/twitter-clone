@@ -1,0 +1,25 @@
+.reciever-account-left-chat{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    background-color: #E7E9EB;
+    padding: 12px;
+    margin-bottom: 15px;
+    margin-right: 5px;
+    font-size: 18px;
+    border-radius: 20px;
+    clear: both;
+
+    & span{
+        position: relative;
+        top: -5px
+    }
+
+    & img{
+        border: 1px solid #cccc;
+        border-radius: 50%;
+        height: 48px; 
+        width:48px;
+        margin-right: 20px;
+    }    
+}
