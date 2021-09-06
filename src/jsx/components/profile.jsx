@@ -34,7 +34,7 @@ class Profile extends React.Component {
 
         //fetch whotofollow
         const whotofollow = await whoToFollow()
-        this.setState({followers: whotofollow})
+        this.setState({followers: whotofollow.filter(user => !this.state.current_user.following.includes(user._id)) })
 
         //fetch avatar profile
         const result = await avatar(localStorage.token)
@@ -124,11 +124,27 @@ render() {
                     </Switch>
                 </div>
             </div>
+   
             <div style = {{flex:'1',paddingLeft:'20px'}}>
+
                     <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
-                        {this.state.followers.map(user => <FollowComponent  {...user}  />)}
+                        {this.state.followers.map((user, index) => index <4? <FollowComponent  {...user}  />: '')}
+                        <a href = "/home/whotofollow" style={{
+                            textDecoration: 'none',
+                            textAlign: 'start',
+                            position: 'relative',
+                            top: '75px',
+                            borderRadius: '20px',
+                            fontSize: '15px',
+                            color: '#1D9BF0',
+                            fontFamily: 'sans-serif',
+                            padding:'15px'
+                        }}>
+                            show more
+                        </a>
                     </div>
+                    
             </div>
         </div>    
         </>

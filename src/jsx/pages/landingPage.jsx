@@ -14,7 +14,7 @@ const LandingPage = ({history,setModalVisibility}) => {
     const handleSignUpClick = () => {
 
         setModalVisibility(true)
-        // sendVerificationCode()
+        // sendVerificationCode(localStorage.token)
 
     }
 

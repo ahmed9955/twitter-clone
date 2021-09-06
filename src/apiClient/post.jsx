@@ -43,6 +43,46 @@ export const getUserPosts = async () => {
     return posts
 }
 
+export const newFeeds = async () => {
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+          
+            "Content-Type": "application/json",
+            "Authorization": localStorage.token
+        },
+        redirect: 'follow'
+      };
+
+      const response = await fetch(`${URL}/newposts`, requestOptions)
+      const feeds = await response.json()
+
+      return feeds
+  
+}
+
+export const newFeedsExplore = async () => {
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+          
+            "Content-Type": "application/json",
+            "Authorization": localStorage.token
+        },
+        redirect: 'follow'
+      };
+
+      const response = await fetch(`${URL}/newposts/explore`, requestOptions)
+      const feeds = await response.json()
+
+      return feeds
+  
+}
+
+
+
 export const setLikedPost = async (id) => {
     
     const requestOptions = {
@@ -97,9 +137,7 @@ export const addReplay =  async (content, id) => {
     var formdata = new FormData();
     formdata.append("content", content);
  
-    // formdata.append("replayPic", file, fileName);
-
-    var requestOptions = {
+    const requestOptions = {
         method: 'POST',
         headers:{
 
@@ -121,13 +159,12 @@ export const addComment =  async (content, id) => {
     var formdata = new FormData();
     formdata.append("content", content);
  
-    // formdata.append("replayPic", file, fileName);
-
-    var requestOptions = {
+    const requestOptions = {
         method: 'POST',
         headers:{
 
             "Authorization": localStorage.token
+
         },
 
         body: formdata,

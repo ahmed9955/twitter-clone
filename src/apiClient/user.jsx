@@ -190,6 +190,19 @@ export const uploadAvatar = async (file, fileName, token) => {
   return avatar
 }
 
+export const resetPassword = async (email, newpassword) => {
+  
+  const requestOptions = {
+    method: 'POST',
+    redirect: 'follow'
+}
+
+  const response = await fetch(`${URL}/resetpassword?email=${email}&password=${newpassword}`, requestOptions)
+  const password = await response.json()
+
+  return password
+}
+
 
 export const logOut = async () => {
   

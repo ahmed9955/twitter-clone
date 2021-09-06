@@ -60,22 +60,26 @@ class Messages extends React.Component {
         console.log(this.state.clients)
         
         socket.on('message', ({ sender, reciever, message}) => {
+            
             this.setState({chat:[...this.state.chat, {message, sender,reciever}]}, () => this.scrollToMyRef())
         })
 
         const chats = await chat()
+
         this.setState({allchats: chats})
 
     }
 
 
     handleLastMessage = (content) => {
-        
+  
         if(this.state.allchats){
-             const messages = this.state.allchats.filter(chat => (
-                chat.reciever.id === this.state.current_user._id || chat.sender.id === this.state.current_user._id  && 
-                chat.reciever.id === content._id || chat.sender.id === content._id ))
-                
+             const messages = this.state.allchats.filter(chat => ((
+                 chat.sender.id === this.state.current_user._id || chat.sender.id === content._id )  
+            
+                 ) && (chat.reciever.id === this.state.current_user._id || chat.reciever.id === content._id) )
+
+
                 const obj = messages[messages.length-1]
 
                 if (obj){
@@ -110,10 +114,11 @@ class Messages extends React.Component {
             for(let c of chat){
 
                 if (                     
-                    c.reciever.id === this.state.current_user._id || c.sender.id === this.state.current_user._id  && 
+                    c.sender.id === this.state.current_user._id  && 
                     c.reciever.id === this.state.sentContent.reciever.id || c.sender.id === this.state.sentContent.reciever.id ) {
                     
                     chatArray.push(c)
+                   
                                         
             }
             }

@@ -101,7 +101,7 @@ const ConfirmSignUp = ({ user,setNewUser,displayConfirm, setConfirmVisibility, s
                 Privacy Options
             </p>
             <div style={{position:'relative', top:'-45px'}}>
-            <TwitterLargeButton title='Sign up' handleClick={handleClick} />
+            <TwitterLargeButton width = '100%' title='Sign up' handleClick={handleClick} />
             </div>
             <VerificationCode   />
         </Modal>

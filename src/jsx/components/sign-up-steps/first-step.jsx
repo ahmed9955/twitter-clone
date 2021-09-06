@@ -145,7 +145,7 @@ class SignUpData extends React.Component {
         </div>  
        
         <div style={{position:'relative', top:'-22px'}}>      
-            <TwitterLargeButton  handleClick={this.handleClick} title='Next'/>
+            <TwitterLargeButton  width="100%" handleClick={this.handleClick} title='Next'/>
         </div>
        
         <PrivacyStep   />

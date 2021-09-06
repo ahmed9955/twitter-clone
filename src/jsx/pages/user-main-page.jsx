@@ -6,12 +6,15 @@ import { setTwitterButtonActive } from '../../redux/modal/action'
 import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/user-main-page.scss'
+import CommentDetails from '../components/comment-details'
+import Explore from '../components/explore'
 import FollowPage from '../components/followPage'
 import Messages from '../components/messages'
 import Profile from '../components/profile'
 import SideNavBar from '../components/side-nav-bar'
 import TweetsView from '../components/tweets-view'
 import PostDetails from './post-details'
+import WhoToFollow from './whotofollow-page'
 
 class UserMainPage extends React.Component {
 
@@ -35,14 +38,17 @@ render(){
                 <div style={{ position:'fixed',zIndex:'20' }}>
                  <SideNavBar />
                 </div>
-                <div style={{ position:'absolute',left:'285px' }}>
+                <div style={{ position:'absolute',left:'255px' }}>
                 <Switch>
                     <Route exact path = '/home' component={TweetsView} />
                     <Route exact path = '/home/messages' component={Messages} />
                     <Route path = '/home/profile' component={Profile} />
+                    <Route path = '/home/explore' component={Explore}/>
                     <Route path = '/home/post_details' component={PostDetails}/>
+                    <Route path = '/home/comment_details' component={CommentDetails}/>
                     <Route exact path='/home/followers' component={FollowPage}  />
                     <Route exact path='/home/following' component={FollowPage}  />
+                    <Route exact path='/home/whotofollow' component={WhoToFollow}  />
                 </Switch>
             </div> 
             </div>

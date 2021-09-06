@@ -3,12 +3,16 @@ import { faAdjust, faBell, faBookmark, faBookReader, faCommentDots, faDotCircle,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { avatar, logOut } from '../../apiClient/user'
+import { avatar, logOut, URL } from '../../apiClient/user'
 
 import '../../styles/components/side-nav-bar.scss'
 import TwitterLargeButton from './twitter-large-button'
 
+
+
 const SideNavBar = ({history}) => {
+
+    const [URL,setURL] = useState('http://localhost:3000/')
     
     const [avatarPro, setAvatarProfile] = useState('')
 
@@ -27,11 +31,24 @@ const SideNavBar = ({history}) => {
 
     const handleLogOutClick = async () => {
 
-        const response = await logOut()
-        if (response){
-            localStorage.removeItem('token')
-            history.push('/')
-        }
+        const response = logOut()
+
+        response.then((res) => {
+            if (res.user){
+                
+                localStorage.removeItem('token')
+                history.push('/')               
+                window.location.href = URL
+                
+            }
+        } )
+
+        // if (response){
+            
+        //     history.push('/')
+            // localStorage.removeItem('token')
+            
+        // }
     }
 
     return(

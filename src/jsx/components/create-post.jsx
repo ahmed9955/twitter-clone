@@ -18,11 +18,14 @@ const CreatePost = ({ userAvatar }) => {
     const [avatarProfile, setAvatar] = useState('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
 
     useEffect( async () => {
-            if (userAvatar.user){
-               return setAvatar(userAvatar.user.avatar)
+
+        if (userAvatar.user){
+            
+                return setAvatar(userAvatar.user.avatar)
                
-            }
-                setAvatar('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
+        } 
+            
+        setAvatar('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
             
     })
 
@@ -34,7 +37,6 @@ const CreatePost = ({ userAvatar }) => {
 
   
         if (e.target.files[0].type == 'video/mp4'){
-            // setPostVideo(e.target.files[0])
             setPostPic('')
             setUploadPostPic(e.target.files[0])        
             setFileName(e.target.files[0].name)
@@ -59,28 +61,43 @@ const CreatePost = ({ userAvatar }) => {
     
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        if (
+            postContent === '' 
+
+            ) {
+                return
+            }
+        
         createNewPost(postContent,uploadPostPic,fileName,localStorage.getItem('token'))      
-    
+        setPostContent('')
+        setPostPic(false)
+        setPostVideo(false)
+        setVisible(false)
+        
+        window.location.reload()
     }
 
    const handleChange = (e) => {
         
         setPostContent(e.target.value)
+
    }
 
     return(
         <>
+
             <form  onSubmit = {handleSubmit} className="create-post-container">
                 <div  className="post-content-input">
                 <img
-                    src={avatarProfile} 
+                    src={avatarProfile?avatarProfile:'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'} 
                     height='48px' 
                     width='48px'
                     style={{border: '1px solid #cccc',borderRadius:'50%'}}>
                 </img>
  
                 <div style={{display:'flex',flexDirection:'column',width:'80%'}}>
-                    <textarea name="content" onChange = {handleChange} onFocus={handleFocus}  className="post-input-field" placeholder="what's happening?" />
+                    <textarea name="content" onChange = {handleChange} value={postContent} onFocus={handleFocus}  className="post-input-field" placeholder="what's happening?" />
                     <div className={visible?'who-see show':'hide'}><span><FontAwesomeIcon icon={faGlobe}/></span><span>Everyone can replay</span></div>
                     <hr className={visible?'show':'hide'}></hr>
                     {
@@ -88,9 +105,8 @@ const CreatePost = ({ userAvatar }) => {
                     <img
                     src={postPic} 
                     height='280px' 
-                    style={{border: '1px solid #cccc',borderRadius:'20px'}}>
-                    width='500px'
-                    </img>
+                    style={{border: '1px solid #cccc',borderRadius:'20px'}}  width='500px'/> 
+                  
                 }
                 {
                     postVideo && 
@@ -107,7 +123,7 @@ const CreatePost = ({ userAvatar }) => {
                     <div className="post-control-icons">
                         <div>
                             <input id="image-post" type='file' accept="audio/*,video/*,image/*" style={{display:'none'}} onChange={handlePostPic}/>
-                            <label style={{cursor:'pointer'}} htmlFor="image-post">
+                            <label style={{cursor:'pointer'}} htmlFor="image-post" onClick = {() => {setPostVideo(true) ;setPostPic(true)}}>
                                 <FontAwesomeIcon icon={faPhotoVideo}/>
                             </label>
                         </div>

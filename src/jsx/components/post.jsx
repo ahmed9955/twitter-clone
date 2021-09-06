@@ -9,9 +9,7 @@ import { setLikedPost, setDisLikedPost } from '../../apiClient/post';
 import { withRouter } from 'react-router';
 import { render } from '@testing-library/react';
 import { profile } from '../../apiClient/user';
-import commentModal from './comment-modal';
-
-// { profileName,avatar,history,setPostDetails,setReplayContent,user_id,setTwitterReplayVisibility,content,media,likes,comments,id}
+import CommentModal from './comment-modal';
 
 class Post extends React.Component {
 
@@ -57,13 +55,17 @@ class Post extends React.Component {
     handleComment = (e) => {
 
         e.stopPropagation();
-        const {content,id} = this.props
+        const {content,id, profileName, avatar, user_id} = this.props
         
         this.props.setTwitterReplayVisibility(true)
 
         this.props.setReplayContent({
             post_id: id,
-            post_content: content
+            post_content: content,
+            type: 'comment',
+            profileName,
+            avatar,
+            user_avatar: user_id.user.avatar
         })
 
     }
@@ -84,7 +86,7 @@ class Post extends React.Component {
 
             const dislike = await setDisLikedPost(this.props.id)
             if (dislike.success){
-                console.log(dislike)
+
                 await this.setState({liked: false})
                 await this.setState({likesNumText: this.state.likesNum.length-1 == -1 ?0:this.state.likesNum.length-1})
               
@@ -96,6 +98,7 @@ class Post extends React.Component {
 
     handlePostClick = () => {
         this.props.history.push(`/home/post_details`)
+
         const {
 
             id, 
@@ -106,6 +109,7 @@ class Post extends React.Component {
             avatar,
             comments
         } = this.props
+
         this.props.setPostDetails({
 
             id, 
@@ -121,9 +125,11 @@ class Post extends React.Component {
     
 render(){
 
- const { profileName,avatar,history,setPostDetails,setReplayContent,user_id,setTwitterReplayVisibility,content,media,likes,comments,id} = this.props
+    const { profileName, avatar, content, media } = this.props
+
     return(
-        <>
+    
+    <>
             <div  className="post-container" onClick={this.handlePostClick}>
                 <div className="post-owner">
                     <img style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
@@ -150,8 +156,10 @@ render(){
                         controls
                         src={media} 
                         height='280px' 
-                        width='500px'
-                        style={{borderRadius:'20px'}}>
+                        width='85%'
+                        style={{borderRadius:'20px', marginRight:'35px'}}
+                        onClick={(e) => e.stopPropagation()}
+                        >
                     </video> : '' 
                 }
 
@@ -160,7 +168,6 @@ render(){
                    <span><FontAwesomeIcon icon={faRetweet} /> 1</span>
                    <span style = {{ color : this.state.liked  ?'#E44D77': 'black'}} onClick={this.handleLike} >{ this.state.liked ?<FavoriteRounded/>:<FavoriteBorder />}<section>{this.state.likesNumText}</section></span>
                    <span ><ShareOutlined/>0</span>
-                   <commentModal  post_content={content} post_id={id}  />
                 </div>
             </div>
         </>

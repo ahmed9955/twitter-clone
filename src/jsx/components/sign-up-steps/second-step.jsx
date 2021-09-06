@@ -31,7 +31,7 @@ const PrivacyStep = ({ displayPrivacy,setPrivacyVisibility,setConfirmVisibility 
                 <a  id='help-center' style={{color:'#1B95E0'}} > Help Center</a>.</p>
                 
                 <div style={{position:'relative', top:'180px'}}>
-                    <TwitterLargeButton handleClick={handleClick} title = 'Next' />
+                    <TwitterLargeButton width= "100%" handleClick={handleClick} title = 'Next' />
                 </div>
                 
                 <ConfirmSignUp  />

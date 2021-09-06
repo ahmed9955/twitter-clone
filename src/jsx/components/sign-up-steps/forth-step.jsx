@@ -9,7 +9,7 @@ import { ConfirmVerification } from '../../../apiClient/user'
 import { withRouter } from 'react-router'
 import ResetPasswordAndGender from './fifth-step'
 
-const VerificationCode = ({ displayVerification,setVerificationVisibility, setTwitterButtonActive,twitterButtonActive,authToken, setResetPasswordVisibility }) => {
+const VerificationCode = ({ location,displayVerification,setVerificationVisibility, setTwitterButtonActive,twitterButtonActive,authToken, setResetPasswordVisibility }) => {
 
 
     const handleChange = async (e) => {
@@ -17,12 +17,14 @@ const VerificationCode = ({ displayVerification,setVerificationVisibility, setTw
        setTwitterButtonActive(false)
   
        const code = await ConfirmVerification(e.target.value, authToken )
-    
-        if(!code.success){
-          setTwitterButtonActive(false)
-        }else{
-            setTwitterButtonActive(true)
-        }
+
+       console.log(code)
+
+       // if(!code.success){
+        //   setTwitterButtonActive(false)
+        // }else{
+        //     setTwitterButtonActive(true)
+        // }
         
         }
 
@@ -31,9 +33,17 @@ const VerificationCode = ({ displayVerification,setVerificationVisibility, setTw
 
         setVerificationVisibility(false)
 
-        setResetPasswordVisibility(true)
+        if (location !== 'from-sign-in'){
 
-        setTwitterButtonActive(true)
+            setResetPasswordVisibility(true)
+            
+        }
+
+        if (location !== 'from-sign-in'){
+
+            setTwitterButtonActive(true)
+
+        }
         
         // localStorage.setItem('token',authToken )
         // history.push('/login')
@@ -48,7 +58,7 @@ const VerificationCode = ({ displayVerification,setVerificationVisibility, setTw
                     <a>Didn't receive email?</a>
                 </div>
                 <div style={{position:'relative',top:'220px'}} >
-                    <TwitterLargeButton   title="next" handleClick={handleClick} />
+                    <TwitterLargeButton width = "100%"   title="next" handleClick={handleClick} />
                 </div>
                 <ResetPasswordAndGender />        
             </Modal>
