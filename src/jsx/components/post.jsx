@@ -87,11 +87,27 @@ class Post extends React.Component {
 
             if (this.props.postDetails.creator_id){
 
-                socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.postDetails.creator_id._id, notification: `likes your post ${this.props.content}`})
+                socket.emit('notifications', {
+                    sender: {
+                        name: this.props.user_id.user.profileName,
+                        avatar: this.props.user_id.user.avatar
+                    
+                    }
+                
+                , reciever: this.props.postDetails.creator_id._id, 
+                notification: `likes your post ${this.props.content}`})
             
             } else {
 
-                socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.id_user , notification: `likes your post ${this.props.content}`})
+                socket.emit('notifications', {
+                    sender:{
+                        
+                        name: this.props.user_id.user.profileName,
+                        avatar: this.props.user_id.user.avatar
+                    
+                    }, 
+                    reciever: this.props.id_user , 
+                    notification: `likes your post ${this.props.content}`})
 
             }
 

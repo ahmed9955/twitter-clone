@@ -22,8 +22,6 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
             const user =  await profile(localStorage.token)  
 
             setUser(user)
-         
-            // console.log('CommentModal', current_user)
 
 })
 
@@ -36,7 +34,10 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
             addReplayToReplay(comment, post_id)
 
                 
-                socket.emit('notifications', {sender: current_user.profileName, reciever: replayContent.creator_id_for_comment, notification: 'replay on your comment'})
+                socket.emit('notifications', {sender:{
+                    name: current_user.profileName,
+                    avatar: current_user.avatar
+                }, reciever: replayContent.creator_id_for_comment, notification: 'replay on your comment'})
 
 
         } else {
@@ -46,11 +47,19 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
             if (creator_id){
 
-                socket.emit('notifications', {sender: current_user.profileName, reciever: creator_id._id, notification: 'comment on your post'})
+                socket.emit('notifications', {sender:{
+                    name: current_user.profileName, 
+                    avatar: current_user.avatar
+                }
+                    , reciever: creator_id._id, notification: 'comment on your post'})
 
             } else {
 
-                socket.emit('notifications', {sender: current_user.profileName, reciever: postDetails.creator_id._id, notification: 'comment on your post'})
+                socket.emit('notifications', {sender: {
+                    name: current_user.profileName,
+                    avatar: current_user.avatar
+                }, 
+                    reciever: postDetails.creator_id._id, notification: 'comment on your post'})
 
             }
 

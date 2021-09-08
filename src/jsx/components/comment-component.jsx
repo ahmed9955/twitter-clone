@@ -60,7 +60,16 @@ class Comment extends React.Component {
         
             like = await setReplayLike(this.props._id)            
             
-            socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.profileName.id, notification: `${this.props.user_id.user.profileName} likes your replay ${this.props.content}`})
+            socket.emit('notifications', {
+                
+                sender: {
+                
+                name: this.props.user_id.user.profileName,
+                avatar: this.props.user_id.user.avatar
+
+            }, 
+                reciever: this.props.profileName.id, 
+                notification: `likes your replay ${this.props.content}`})
 
             console.log(like, 'like comment')
 
@@ -68,7 +77,11 @@ class Comment extends React.Component {
             
             like = await setCommentLike(this.props._id)
 
-            socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.profileName.id , notification: `${this.props.user_id.user.profileName} likes your comment ${this.props.content}`})
+            socket.emit('notifications', {sender: {
+                name: this.props.user_id.user.profileName,
+                avatar: this.props.user_id.user.avatar
+            },
+                reciever: this.props.profileName.id , notification: `likes your comment ${this.props.content}`})
 
             console.log(like)
     

@@ -10,6 +10,7 @@ import CommentDetails from '../components/comment-details'
 import Explore from '../components/explore'
 import FollowPage from '../components/followPage'
 import Messages from '../components/messages'
+import Notifications from '../components/notifications'
 import Profile from '../components/profile'
 import publicFollow from '../components/public-follow'
 import SideNavBar from '../components/side-nav-bar'
@@ -45,6 +46,7 @@ render(){
                     <Route exact path = '/home/messages' component={Messages} />
                     <Route exact path = '/home/profile/:id' component={Profile} />
                     <Route path = '/home/explore' component={Explore}/>
+                    <Route path = '/home/notification' component={Notifications}/>
                     <Route path = '/home/post_details' component={PostDetails}/>
                     <Route path = '/home/comment_details' component={CommentDetails}/>
                     <Route exact path='/home/followers' component={FollowPage}  />
