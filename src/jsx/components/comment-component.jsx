@@ -10,6 +10,9 @@ import CommentModal from './comment-modal'
 import '../../styles/components/comment.scss'
 import { withRouter } from 'react-router'
 import { setReplayLike } from '../../apiClient/replay'
+import io from 'socket.io-client'
+
+const socket = io('http://localhost:2000')
 
 
 class Comment extends React.Component {
@@ -57,11 +60,15 @@ class Comment extends React.Component {
         
             like = await setReplayLike(this.props._id)            
             
-            console.log(like)
+            socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.profileName.id, notification: `${this.props.user_id.user.profileName} likes your replay ${this.props.content}`})
+
+            console.log(like, 'like comment')
 
         } else {
             
             like = await setCommentLike(this.props._id)
+
+            socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.profileName.id , notification: `${this.props.user_id.user.profileName} likes your comment ${this.props.content}`})
 
             console.log(like)
     
@@ -71,6 +78,7 @@ class Comment extends React.Component {
 
             await this.setState({liked: true})
             await this.setState({likesNumText: this.state.likes.length+1})
+
 
         } else {
             if (this.props.type === 'comment'){
@@ -96,7 +104,8 @@ class Comment extends React.Component {
         this.props.setReplayContent({
             post_id: this.props._id,
             post_content: this.props.content,
-            type: 'replay'
+            type: 'replay',
+            creator_id_for_comment: this.props.creator
         })
 
     }
@@ -142,7 +151,7 @@ render(){
                 <div style={{display:'flex',margin:'20px'}}>
                     <img style={{borderRadius:'50%'}} width='48px' height='48px' src={media}/>
                     <div style={{marginLeft:'10px',display:'flex', flexDirection:'column'}}>
-                    <span style={{ fontWeight: 'bold' }} >{profileName}</span>
+                    <span style={{ fontWeight: 'bold' }} >{profileName.profileName}</span>
                     <input style={{ border:'none', outline:'none' }} value={content} readOnly />
                 </div>
 

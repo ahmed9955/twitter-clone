@@ -11,6 +11,7 @@ import Explore from '../components/explore'
 import FollowPage from '../components/followPage'
 import Messages from '../components/messages'
 import Profile from '../components/profile'
+import publicFollow from '../components/public-follow'
 import SideNavBar from '../components/side-nav-bar'
 import TweetsView from '../components/tweets-view'
 import PostDetails from './post-details'
@@ -42,12 +43,13 @@ render(){
                 <Switch>
                     <Route exact path = '/home' component={TweetsView} />
                     <Route exact path = '/home/messages' component={Messages} />
-                    <Route path = '/home/profile' component={Profile} />
+                    <Route exact path = '/home/profile/:id' component={Profile} />
                     <Route path = '/home/explore' component={Explore}/>
                     <Route path = '/home/post_details' component={PostDetails}/>
                     <Route path = '/home/comment_details' component={CommentDetails}/>
                     <Route exact path='/home/followers' component={FollowPage}  />
                     <Route exact path='/home/following' component={FollowPage}  />
+                    <Route exact path='/home/following/:id' component={publicFollow}  />
                     <Route exact path='/home/whotofollow' component={WhoToFollow}  />
                 </Switch>
             </div> 

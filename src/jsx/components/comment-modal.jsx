@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { addComment } from '../../apiClient/post'
 import { addReplayToReplay } from '../../apiClient/replay'
@@ -6,19 +6,54 @@ import {  setTwitterReplayVisibility } from '../../redux/modal/action'
 import Modal from './modal'
 import TwitterLargeButton from './twitter-large-button'
 
-const CommentModal = ({type,post_content,post_id, displayReplayVisibility, setTwitterReplayVisibility, profileName, avatar, user_avatar}) => {
+import io from 'socket.io-client'
+import { profile } from '../../apiClient/user'
+
+const socket = io('http://localhost:2000')
+
+
+const CommentModal = ({postDetails,replayContent,type,post_content,post_id, creator_id, displayReplayVisibility, setTwitterReplayVisibility, profileName, avatar, user_avatar}) => {
 
     const [comment , setComment] = useState('')
+    const [current_user, setUser] = useState('')
+
+    useEffect(async ()=> {
+
+            const user =  await profile(localStorage.token)  
+
+            setUser(user)
+         
+            // console.log('CommentModal', current_user)
+
+})
 
     const handleClick = () => {
 
+        socket.emit('notifications', {sender: '', reciever: '', notification: ''})        
+
         if (type === 'replay'){
+            
             addReplayToReplay(comment, post_id)
+
+                
+                socket.emit('notifications', {sender: current_user.profileName, reciever: replayContent.creator_id_for_comment, notification: 'replay on your comment'})
+
+
         } else {
 
 
             addComment(comment, post_id)
-        
+
+            if (creator_id){
+
+                socket.emit('notifications', {sender: current_user.profileName, reciever: creator_id._id, notification: 'comment on your post'})
+
+            } else {
+
+                socket.emit('notifications', {sender: current_user.profileName, reciever: postDetails.creator_id._id, notification: 'comment on your post'})
+
+            }
+
         }
         
         setComment('')
@@ -72,7 +107,10 @@ const CommentModal = ({type,post_content,post_id, displayReplayVisibility, setTw
 
 const mapStateToProps = state => ({
     displayReplayVisibility: state.modal.displayReplayVisibility,
-    type: state.modal.replayContent.type
+    type: state.modal.replayContent.type,
+    user: state.user.current_user,
+    replayContent: state.modal.replayContent,
+    postDetails: state.modal.postDetails
 })
 
 const mapDispatchToProps = dispatch => ({

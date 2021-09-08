@@ -54,6 +54,24 @@ export const following = async () => {
     return result
 }
 
+export const publicFollowing = async (id) => {
+    
+  const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers:{
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.token
+      }
+    };
+    
+  const response = await fetch(`${URL}/following/${id}`, requestOptions)
+  const result = await response.json()
+  
+  return result
+}
+
+
 export const followers = async () => {
     
     const requestOptions = {
@@ -69,6 +87,24 @@ export const followers = async () => {
     const result = await response.json()
     
     return result
+}
+
+
+export const publicFollowers = async (id) => {
+    
+  const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers:{
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.token
+      }
+    };
+    
+  const response = await fetch(`${URL}/followers/${id}`, requestOptions)
+  const result = await response.json()
+  
+  return result
 }
 
 
@@ -124,3 +160,5 @@ export const unfollow = async (id) => {
       console.log(result)
     
 }
+
+

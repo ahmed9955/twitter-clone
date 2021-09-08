@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { getUserPosts } from '../../apiClient/post'
 import CommentModal from './comment-modal'
 import Post from './post'
@@ -14,7 +15,7 @@ class Tweets extends React.Component {
     }
     
     async componentDidMount(){
-        const posts = await getUserPosts()
+        const posts = await getUserPosts(this.props.match.params.id)
         this.setState({userPosts: posts})
         
     }
@@ -39,4 +40,4 @@ const mapStateToProps = (state) => ({
 
 })
 
-export default connect(mapStateToProps)(Tweets)
+export default withRouter(connect(mapStateToProps)(Tweets))

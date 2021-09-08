@@ -2,6 +2,7 @@ import { faCriticalRole, faEvernote, faGgCircle, faTwitter } from '@fortawesome/
 import { faAdjust, faBell, faBookmark, faBookReader, faCommentDots, faDotCircle, faEnvelope, faHashtag, faHome, faInfoCircle, faList, faNotesMedical, faSearch, faThList, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { avatar, logOut, URL } from '../../apiClient/user'
 
@@ -10,7 +11,7 @@ import TwitterLargeButton from './twitter-large-button'
 
 
 
-const SideNavBar = ({history}) => {
+const SideNavBar = ({history, user_id}) => {
 
     const [URL,setURL] = useState('http://localhost:3000/')
     
@@ -21,6 +22,7 @@ const SideNavBar = ({history}) => {
     useEffect(async () => {
         
         const avatarProfile = await  avatar(localStorage.token)
+
         if (avatarProfile){
             setAvatarProfile(avatarProfile) 
             
@@ -43,12 +45,6 @@ const SideNavBar = ({history}) => {
             }
         } )
 
-        // if (response){
-            
-        //     history.push('/')
-            // localStorage.removeItem('token')
-            
-        // }
     }
 
     return(
@@ -64,7 +60,7 @@ const SideNavBar = ({history}) => {
                     <a href="/home/messages"><section><FontAwesomeIcon icon={faEnvelope}/></section><span>Messages</span></a>
                     <a href="/home/bookmarks"><section><FontAwesomeIcon icon={faBookmark}/></section><span>Bookmarks</span></a>
                     <a href="/home/lists"><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a>
-                    <a href="/home/profile"><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
+                    <a href={`/home/profile/${user_id.user?user_id.user._id:''}`} ><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
                     <a href="/home/more"><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
                     <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton width="100%" title="tweet"/></div>
                 </nav>
@@ -90,4 +86,10 @@ const SideNavBar = ({history}) => {
     
 }
 
-export default withRouter(SideNavBar)
+const mapStateToProps = (state) => ({
+
+    user_id: state.user
+
+})
+
+export default withRouter(connect(mapStateToProps)(SideNavBar))

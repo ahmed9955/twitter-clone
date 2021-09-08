@@ -27,7 +27,7 @@ export const createNewPost = async (content,file,fileName,token) => {
 }
 
 
-export const getUserPosts = async () => {
+export const getUserPosts = async (id) => {
     const requestOptions = {
         method: 'GET',
         headers:{
@@ -37,7 +37,7 @@ export const getUserPosts = async () => {
         redirect: 'follow'
       };
       
-    const response = await fetch(`${URL}/post/me`, requestOptions)
+    const response = await fetch(`${URL}/post/${id}`, requestOptions)
     const posts = await response.json()
 
     return posts

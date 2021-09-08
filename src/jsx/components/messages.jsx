@@ -1,15 +1,13 @@
 import React from 'react'
 import '../../styles/components/messages.scss'
-import {SendRounded, SendOutlined, AddShoppingCartSharp} from '@material-ui/icons'
+import { SendRounded } from '@material-ui/icons'
 import io from 'socket.io-client'
 import { followers } from '../../apiClient/follow'
 import { connect } from 'react-redux'
 import { profile } from '../../apiClient/user'
 import LeftChat from './left-chat-message'
 import RightChat from './right-chat-message'
-import ScrollToBottom from 'react-scroll-to-bottom';
 import { chat } from '../../apiClient/chat'
-import ReactScrollableFeed from 'react-scrollable-feed'
 
 const socket = io('http://localhost:2000')
 

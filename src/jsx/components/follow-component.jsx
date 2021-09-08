@@ -5,7 +5,7 @@ import { acceptFollow, requestFollow, unfollow } from '../../apiClient/follow'
 import '../../styles/components/follow-component.scss'
 
 
-const FollowComponent = ({user,_id, profileName, tagname, avatar, followType}) => {
+const FollowComponent = ({type,user,_id, profileName, tagname, avatar, followType}) => {
     
 
     const [followText, setFollowText] = useState('following')
@@ -63,12 +63,17 @@ const handleUnfollowClick = () => {
                     <span>{profileName}</span>
                     <span>@nameHash</span>
                 </div>
+
+                {type !== 'notUser' &&
+
                 <div className="follow-button" style={{
                 display: !displyFollowButton?'block':'none'
                 ,background:'black',
                 color:'white'
-                }} onClick={ handleFollowClick } >follow</div>
-           
+                }} onClick={ handleFollowClick } >
+                    follow
+                </div>
+                }
             <div style={{display: displyFollowButton?'block':'none'}} onClick={handleUnfollowClick} className={`${followText}` == 'unFollow'?'following-trans follow-button':'follow-button'} onMouseEnter={handleHover} onMouseLeave={handleLeave}  >{followText}</div>
          </div>       
          

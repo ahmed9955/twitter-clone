@@ -7,15 +7,17 @@ import { setPostDetails, setReplayContent, setTwitterReplayVisibility } from '..
 import { connect } from 'react-redux';
 import { setLikedPost, setDisLikedPost } from '../../apiClient/post';
 import { withRouter } from 'react-router';
-import { render } from '@testing-library/react';
 import { profile } from '../../apiClient/user';
-import CommentModal from './comment-modal';
+import io from 'socket.io-client'
+
+const socket = io('http://localhost:2000')
 
 class Post extends React.Component {
 
     constructor(){
         super()
         this.state = {
+
             flag: false,
             liked: false,
             likesNum: '',
@@ -55,7 +57,7 @@ class Post extends React.Component {
     handleComment = (e) => {
 
         e.stopPropagation();
-        const {content,id, profileName, avatar, user_id} = this.props
+        const {content,id, profileName, avatar, user_id,creator} = this.props
         
         this.props.setTwitterReplayVisibility(true)
 
@@ -65,7 +67,8 @@ class Post extends React.Component {
             type: 'comment',
             profileName,
             avatar,
-            user_avatar: user_id.user.avatar
+            user_avatar: user_id.user.avatar,
+            creator_id: creator
         })
 
     }
@@ -82,6 +85,18 @@ class Post extends React.Component {
             await this.setState({liked: true})
             await this.setState({likesNumText: this.state.likesNum.length+1})
 
+            if (this.props.postDetails.creator_id){
+
+                socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.postDetails.creator_id._id, notification: `likes your post ${this.props.content}`})
+            
+            } else {
+
+                socket.emit('notifications', {sender: this.props.user_id.user.profileName, reciever: this.props.id_user , notification: `likes your post ${this.props.content}`})
+
+            }
+
+            
+
         } else{
 
             const dislike = await setDisLikedPost(this.props.id)
@@ -97,6 +112,7 @@ class Post extends React.Component {
     }
 
     handlePostClick = () => {
+
         this.props.history.push(`/home/post_details`)
 
         const {
@@ -107,7 +123,9 @@ class Post extends React.Component {
             likes,
             profileName,
             avatar,
-            comments
+            comments,
+            creator
+
         } = this.props
 
         this.props.setPostDetails({
@@ -118,8 +136,16 @@ class Post extends React.Component {
             likes,
             profileName,
             avatar,
-            comments
+            comments,
+            creator_id: creator
         })
+    }
+
+    handlePostImgClick = (e) => {
+        e.stopPropagation();
+
+        this.props.history.push(`/home/profile/${this.props.id_user}`)
+  
     }
 
     
@@ -132,7 +158,7 @@ render(){
     <>
             <div  className="post-container" onClick={this.handlePostClick}>
                 <div className="post-owner">
-                    <img style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
+                    <img onClick = {this.handlePostImgClick} style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
                     <span>{profileName}</span>
                 </div>
                 <input className="post-content" value={content} readOnly />
@@ -175,7 +201,8 @@ render(){
 }}
 
 const mapStateToProps = state => ({
-    user_id: state.user
+    user_id: state.user,
+    postDetails: state.modal.postDetails
 })
 
 const mapDispatchToProps = dispatch => ({

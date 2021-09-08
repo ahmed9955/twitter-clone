@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Route, Switch, withRouter } from 'react-router'
 import { whoToFollow } from '../../apiClient/follow'
 import { getUserPosts } from '../../apiClient/post'
-import { avatar, profile, uploadAvatar } from '../../apiClient/user'
+import { avatar, getOneUser, profile, uploadAvatar } from '../../apiClient/user'
 import { setLikes, setMedia } from '../../redux/user/action'
 import '../../styles/components/profile.scss'
 import FollowComponent from './follow-component'
@@ -22,26 +22,32 @@ class Profile extends React.Component {
             avatarProfile:'',
             userPosts:[],
             current_user:{},
-            followers:[]
+            followers:[],
+            account_owner: {}
         }
     }
 
     async componentDidMount() {
      
         //fetch user profile
-        const response = await profile(localStorage.token)
-        this.setState({current_user: response})
+
+        const current_profile = await profile(localStorage.token)
+        this.setState({account_owner: current_profile})
+
+        const public_profile = await getOneUser(this.props.match.params.id)
+                
+        this.setState({current_user: public_profile})
 
         //fetch whotofollow
         const whotofollow = await whoToFollow()
-        this.setState({followers: whotofollow.filter(user => !this.state.current_user.following.includes(user._id)) })
+        this.setState({followers: whotofollow.filter(user => !this.state.account_owner.following.includes(user._id)) })
 
         //fetch avatar profile
-        const result = await avatar(localStorage.token)
-        if (result){
-            return this.setState({avatarProfile: result})
-        } 
-        this.setState({ avatarProfile:'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
+        // const result = await avatar(localStorage.token)
+        // if (result){
+         this.setState({avatarProfile: this.state.current_user?this.state.current_user.avatar: 'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
+        // } 
+        // this.setState({ avatarProfile:'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
         
     }
 
@@ -67,7 +73,10 @@ render() {
                     <div className='portrait'>
                         <img style={{visibility:'hidden'}} width="100%" height="100%" src = "" />
                     </div>
+                    { this.state.current_user._id === this.state.account_owner._id &&
+                    
                     <div className='edit-profile'>Edit Profile</div>
+                    }
                     <div className="profile-picture-rounded">
                         <input id="upload_avatar" onChange={this.handleAvatar} style={{display: 'none'}} type='file' accept='image/*' />
                         <label style={{cursor:'pointer'}} for='upload_avatar'>
@@ -79,33 +88,37 @@ render() {
                             <span> <FontAwesomeIcon icon={faCalendar}  /> joined {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[1]:''} {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[0]:''}  </span>
                             <div className="following">
 
-                                <a href='/home/following' ><span>{this.state.current_user.following?this.state.current_user.following.length:''}</span> Following</a>
-                                <a href='/home/followers' ><span>{this.state.current_user.followers?this.state.current_user.followers.length:''}</span> Followers</a>
-                            
+                                <a href={ 
+                                    this.state.current_user._id === this.state.account_owner._id? 
+                                '/home/following': `/home/following/${this.props.match.params.id}?follow=following`
+                            } ><span>{this.state.current_user.following?this.state.current_user.following.length:''}</span> Following</a>
+                                <a href={
+                                    this.state.current_user._id === this.state.account_owner._id?
+                                    '/home/followers': `/home/following/${this.props.match.params.id}?follow=follower` } ><span>{this.state.current_user.followers?this.state.current_user.followers.length:''}</span> Followers</a>
                             </div> 
                         </div>
                     </div>
                 </div>
                 <div  className="tweets-nav-bar">
-                    <a href="/home/profile" className={localStorage.getItem('tweets')} onClick={() => {
+                    <a href={`/home/profile/${this.state.current_user._id}`} className={localStorage.getItem('tweets')} onClick={() => {
                         localStorage.setItem('tweets','nav-focus')
                         localStorage.setItem('tweetsAndReplays','')
                         localStorage.setItem('media','')
                         localStorage.setItem('likes','')
                     }}>Tweets</a>
-                    <a href="/home/profile/withReplays" className={localStorage.tweetsAndReplays} onClick={() => {
+                    <a href={`/home/profile/${this.state.current_user._id}/withReplays`} className={localStorage.tweetsAndReplays} onClick={() => {
                         localStorage.setItem('tweets','')
                         localStorage.setItem('tweetsAndReplays','nav-focus')
                         localStorage.setItem('media','')
                         localStorage.setItem('likes','')
                     }} >Tweets & replies</a>
-                    <a href="/home/profile/media" className={localStorage.media} onClick={() => {
+                    <a href={`/home/profile/${this.state.current_user._id}/media`} className={localStorage.media} onClick={() => {
                         localStorage.setItem('tweets','')
                         localStorage.setItem('tweetsAndReplays','')
                         localStorage.setItem('media','nav-focus')
                         localStorage.setItem('likes','')
                     }} >Media</a>
-                    <a href="/home/profile/withLikes" className={localStorage.likes} onClick={() => {
+                    <a href={`/home/profile/${this.state.current_user._id}/withLikes`} className={localStorage.likes} onClick={() => {
                              localStorage.setItem('tweets','')
                              localStorage.setItem('tweetsAndReplays','')
                              localStorage.setItem('media','')
@@ -116,10 +129,10 @@ render() {
                 <div style={{ height:'440px' }}>
 
                     <Switch>
-                        <Route exact path="/home/profile" component={Tweets} />
-                        <Route path="/home/profile/withReplays" component={TweetsAndReplies} />
-                        <Route path="/home/profile/media" component={Media} />
-                        <Route path="/home/profile/withLikes" component={Likes} />
+                        <Route exact path="/home/profile/:id" component={Tweets} />
+                        <Route path={`/home/profile/:id/withReplays`} component={TweetsAndReplies} />
+                        <Route path={`/home/profile/:id/media`} component={Media} />
+                        <Route path={`/home/profile/:id/withLikes`} component={Likes} />
               
                     </Switch>
                 </div>

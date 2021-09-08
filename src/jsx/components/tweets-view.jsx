@@ -34,11 +34,11 @@ render(){
             <div className='tweets-container'>
                 <CreatePost />
                 
-                {this.state.newFeeds.map(post => <Post id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar}/>)}
+                {this.state.newFeeds.map(post => <Post creator = {post.user}  id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
                 
             </div>
 
-            <CommentModal user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
+            <CommentModal creator_id = {this.props.replayContent.creator_id} user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
 
         </>
     )
@@ -46,7 +46,8 @@ render(){
 }
 
 const mapStateToProps = (state) => ({
-    replayContent: state.modal.replayContent
+    replayContent: state.modal.replayContent,
+    
 })
 
 

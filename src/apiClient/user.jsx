@@ -221,3 +221,22 @@ export const logOut = async () => {
   return result
 }
 
+export const getOneUser = async (id) => {
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers:{
+      'Content-Type': 'application/json',
+    }
+}
+    
+    const response = await fetch(`${URL}/user/${id}`, requestOptions)
+    const user = await response.json()
+    
+    return user
+  
+  }
+
+
+
+
