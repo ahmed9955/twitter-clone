@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Route, Switch, withRouter } from 'react-router'
 import { whoToFollow } from '../../apiClient/follow'
 import { getUserPosts } from '../../apiClient/post'
-import { avatar, getOneUser, profile, uploadAvatar } from '../../apiClient/user'
+import { avatar, getOneUser, profile, uploadAvatar, uploadPortrait } from '../../apiClient/user'
 import { setLikes, setMedia } from '../../redux/user/action'
 import '../../styles/components/profile.scss'
 import FollowComponent from './follow-component'
@@ -23,7 +23,8 @@ class Profile extends React.Component {
             userPosts:[],
             current_user:{},
             followers:[],
-            account_owner: {}
+            account_owner: {},
+            portrait_photo: ''
         }
     }
 
@@ -34,20 +35,15 @@ class Profile extends React.Component {
         const current_profile = await profile(localStorage.token)
         this.setState({account_owner: current_profile})
 
-        const public_profile = await getOneUser(this.props.match.params.id)
-                
+        const public_profile = await getOneUser(this.props.match.params.id)                
         this.setState({current_user: public_profile})
 
         //fetch whotofollow
         const whotofollow = await whoToFollow()
         this.setState({followers: whotofollow.filter(user => !this.state.account_owner.following.includes(user._id)) })
 
-        //fetch avatar profile
-        // const result = await avatar(localStorage.token)
-        // if (result){
          this.setState({avatarProfile: this.state.current_user?this.state.current_user.avatar: 'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
-        // } 
-        // this.setState({ avatarProfile:'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
+         this.setState({portrait_photo: this.state.current_user?this.state.current_user.portrait: 'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'})
         
     }
 
@@ -61,6 +57,22 @@ class Profile extends React.Component {
             this.setState({avatarProfile: e.target.result})
         }
     }
+
+    handlePortrait =  async(e) => {
+
+        const portrait = await uploadPortrait(e.target.files[0], e.target.files[0].name)
+        console.log(portrait, 'portrait')
+
+        let reader = new FileReader()
+
+        reader.readAsDataURL(e.target.files[0])
+            
+        reader.onload =(e) => {
+            this.setState({portrait_photo: e.target.result})
+        }
+        
+    }
+
 render() {
     return(
         <>
@@ -71,7 +83,10 @@ render() {
                 </div>
                 <div className='profile-details'>
                     <div className='portrait'>
-                        <img style={{visibility:'hidden'}} width="100%" height="100%" src = "" />
+                        <input id="upload_portrait" onChange={this.handlePortrait} style={{display: 'none'}} type='file' accept='image/*' />                    
+                        <label style={{cursor:'pointer', width: '100%' , height: '100%'}} for='upload_portrait'>
+                            <img src = {this.state.portrait_photo} style={{display: this.state.portrait_photo?'block':'none'}} width="100%" height="100%"  />
+                        </label>
                     </div>
                     { this.state.current_user._id === this.state.account_owner._id &&
                     
@@ -106,12 +121,7 @@ render() {
                         localStorage.setItem('media','')
                         localStorage.setItem('likes','')
                     }}>Tweets</a>
-                    <a href={`/home/profile/${this.state.current_user._id}/withReplays`} className={localStorage.tweetsAndReplays} onClick={() => {
-                        localStorage.setItem('tweets','')
-                        localStorage.setItem('tweetsAndReplays','nav-focus')
-                        localStorage.setItem('media','')
-                        localStorage.setItem('likes','')
-                    }} >Tweets & replies</a>
+
                     <a href={`/home/profile/${this.state.current_user._id}/media`} className={localStorage.media} onClick={() => {
                         localStorage.setItem('tweets','')
                         localStorage.setItem('tweetsAndReplays','')
@@ -129,10 +139,10 @@ render() {
                 <div style={{ height:'440px' }}>
 
                     <Switch>
-                        <Route exact path="/home/profile/:id" component={Tweets} />
-                        <Route path={`/home/profile/:id/withReplays`} component={TweetsAndReplies} />
-                        <Route path={`/home/profile/:id/media`} component={Media} />
-                        <Route path={`/home/profile/:id/withLikes`} component={Likes} />
+                        <Route  exact path="/home/profile/:id" component={Tweets} />
+                        <Route  exact path="/home/profile/:id/withReplays" component={TweetsAndReplies} />
+                        <Route  exact path="/home/profile/:id/media" component={Media} />
+                        <Route  exact path="/home/profile/:id/withLikes" component={Likes} />
               
                     </Switch>
                 </div>
@@ -146,8 +156,8 @@ render() {
                         <a href = "/home/whotofollow" style={{
                             textDecoration: 'none',
                             textAlign: 'start',
-                            position: 'relative',
-                            top: '75px',
+                            position: 'absolute',
+                            top: '310px',
                             borderRadius: '20px',
                             fontSize: '15px',
                             color: '#1D9BF0',
@@ -157,7 +167,20 @@ render() {
                             show more
                         </a>
                     </div>
+                    <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    width: '350px',
                     
+            }}>
+
+                    <a className="policy">Terms of Service</a>
+                    <a className="policy">Privacy Policy</a>
+                    <a className="policy">Cookie Policy</a>
+                    <a className="policy">Ads info</a>
+                    <span className="policy-span">© 2021 Twitter, Inc.</span>
+
+                </div>                    
             </div>
         </div>    
         </>

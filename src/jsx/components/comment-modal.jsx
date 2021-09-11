@@ -36,8 +36,11 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
                 
                 socket.emit('notifications', {sender:{
                     name: current_user.profileName,
-                    avatar: current_user.avatar
+                    avatar: current_user.avatar,
+                    content: post_content
                 }, reciever: replayContent.creator_id_for_comment, notification: 'replay on your comment'})
+
+                socket.emit('notificationsCount', replayContent.creator_id_for_comment)
 
 
         } else {
@@ -49,17 +52,23 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
                 socket.emit('notifications', {sender:{
                     name: current_user.profileName, 
-                    avatar: current_user.avatar
+                    avatar: current_user.avatar,
+                    content: post_content
                 }
                     , reciever: creator_id._id, notification: 'comment on your post'})
+
+                    socket.emit('notificationsCount', creator_id._id)
 
             } else {
 
                 socket.emit('notifications', {sender: {
                     name: current_user.profileName,
-                    avatar: current_user.avatar
+                    avatar: current_user.avatar,
+                    content: post_content
                 }, 
                     reciever: postDetails.creator_id._id, notification: 'comment on your post'})
+
+                    socket.emit('notificationsCount', postDetails.creator_id._id)
 
             }
 

@@ -60,3 +60,21 @@ export const setReplayLike = async (id) => {
     return result
 
 }
+
+export const setReplayDisLike = async (id) => {
+
+    const requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.token
+        }
+      };
+      
+    const response = await fetch(`${URL}/replay/dislike/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+
+}

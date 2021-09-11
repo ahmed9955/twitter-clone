@@ -7,6 +7,7 @@ import LandingPage from './jsx/pages/landingPage';
 import ResetPasswordPage from './jsx/pages/reset-password';
 import SignIn from './jsx/pages/sign-in';
 import UserMainPage from './jsx/pages/user-main-page';
+import Form from './jsx/testComponent';
 import './styles/mediaQuery/mediaQuery.scss'
 
 class App extends React.Component {
@@ -14,7 +15,7 @@ class App extends React.Component {
   render(){
   return (
     <div className="App">
-      
+
       <Switch>
         <Route exact path='/' >
           {
@@ -29,7 +30,6 @@ class App extends React.Component {
         <Route path = '/resetPassword' component = { ResetPasswordPage } />
 
       </Switch>
-      {/* <SocketIo /> */}
     
     </div>
     )

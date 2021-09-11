@@ -5,17 +5,22 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import { avatar, logOut, URL } from '../../apiClient/user'
-
+import io from 'socket.io-client'
 import '../../styles/components/side-nav-bar.scss'
 import TwitterLargeButton from './twitter-large-button'
+import { getnotificationsCount } from '../../apiClient/notifications'
+import { setTweetModalVisibility } from '../../redux/modal/action'
+import TweetModal from './tweet-modal'
+
+const socket = io('http://localhost:2000')
 
 
-
-const SideNavBar = ({history, user_id}) => {
+const SideNavBar = ({history, user_id, setTweetModalVisibility}) => {
 
     const [URL,setURL] = useState('http://localhost:3000/')
     
     const [avatarPro, setAvatarProfile] = useState('')
+    const [notificationsCount, setNotificationsCount] = useState(0)
 
     const [displayLogout, setDisplayLogout] = useState(false)
 
@@ -29,6 +34,15 @@ const SideNavBar = ({history, user_id}) => {
         } else {
             setAvatarProfile('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
         }
+
+        const notifCount = await getnotificationsCount()
+        setNotificationsCount(notifCount)
+
+        socket.on('notificationsCount', (count) => {
+
+            setNotificationsCount(count)
+        })
+
     })
 
     const handleLogOutClick = async () => {
@@ -47,6 +61,10 @@ const SideNavBar = ({history, user_id}) => {
 
     }
 
+   const handleTweetModalClick = () => {
+    setTweetModalVisibility(true)
+}
+
     return(
         <>
             <div className="side-navbar-container">
@@ -56,13 +74,24 @@ const SideNavBar = ({history, user_id}) => {
                         </a>
                     <a href="/home" ><section><FontAwesomeIcon icon={faHome}/></section><span>Home</span></a>
                     <a href="/home/explore"><section><FontAwesomeIcon icon={faHashtag}/></section><span>Explore</span></a>
-                    <a href="/home/notification"><section><FontAwesomeIcon icon={faBell}/></section><span>Notification</span></a>
+                    <a href="/home/notification"><section>
+                        {notificationsCount !== 0 && <div style={{
+                        position: 'absolute',
+                        backgroundColor: 'red',
+                        width: '20px',
+                        height: '20px',
+                        textAlign:'center',
+                        borderRadius: '50%',
+                        color: 'white',
+                        fontSize: '12px'
+                    }}>{notificationsCount}
+                    </div>}<FontAwesomeIcon icon={faBell}/></section><span>Notification</span></a>
                     <a href="/home/messages"><section><FontAwesomeIcon icon={faEnvelope}/></section><span>Messages</span></a>
                     <a href="/home/bookmarks"><section><FontAwesomeIcon icon={faBookmark}/></section><span>Bookmarks</span></a>
-                    <a href="/home/lists"><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a>
+                    {/* <a href="/home/lists"><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a> */}
                     <a href={`/home/profile/${user_id.user?user_id.user._id:''}`} ><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
                     <a href="/home/more"><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
-                    <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton width="100%" title="tweet"/></div>
+                    <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton handleClick={handleTweetModalClick} width="100%" title="tweet"/></div>
                 </nav>
                 <div className="account-owner" onClick={() => setDisplayLogout(!displayLogout)}>
                 <img
@@ -72,15 +101,20 @@ const SideNavBar = ({history, user_id}) => {
                     style={{border: '1px solid #cccc',borderRadius:'50%'}}>
                 </img>
                 <div className='account-name' >
-                    <span>User Name</span>
-                    <span>@Hashtag for user</span>
+                    <span>{user_id.user?user_id.user.profileName:''}</span>
+                    <span>@{user_id.user?user_id.user.profileName:''}</span>
                 </div>
-                <div>
+                <div style={{marginRight: '10px'}}>
                     <FontAwesomeIcon icon={faInfoCircle}/>
                 </div>
-                    <div className="logout" onClick={handleLogOutClick} style={{ visibility: displayLogout?'visible':'hidden' }}><span>logOut @account name</span></div>
+                    <div className="logout" 
+                        onClick={handleLogOutClick} 
+                        style={{ visibility: displayLogout?'visible':'hidden' }}>
+                        <span>logOut @{user_id.user?user_id.user.profileName:''}</span>
+                    </div>
                 </div>
             </div>            
+            <TweetModal />
         </>
     )
     
@@ -92,4 +126,11 @@ const mapStateToProps = (state) => ({
 
 })
 
-export default withRouter(connect(mapStateToProps)(SideNavBar))
+const mapDispatchToProps = dispatch => ({
+
+    setTweetModalVisibility: display => dispatch(setTweetModalVisibility(display))
+
+})
+
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNavBar))

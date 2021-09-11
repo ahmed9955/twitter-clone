@@ -6,8 +6,10 @@ import { createNewPost } from '../../apiClient/post'
 import { avatar } from '../../apiClient/user'
 import '../../styles/components/create-post.scss'
 import TwitterLargeButton from './twitter-large-button'
+import Picker, { SKIN_TONE_MEDIUM_DARK } from 'emoji-picker-react';
+import zIndex from '@material-ui/core/styles/zIndex'
 
-const CreatePost = ({ userAvatar }) => {
+const CreatePost = ({ userAvatar, location }) => {
 
     const [visible,setVisible] = useState(false)
     const [postPic, setPostPic] = useState('')
@@ -16,6 +18,8 @@ const CreatePost = ({ userAvatar }) => {
     const [fileName, setFileName] = useState('')
     const [postContent, setPostContent] = useState('')
     const [avatarProfile, setAvatar] = useState('https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png')
+    const [displayEmoj, setDisplayEmoj] = useState(false)
+
 
     useEffect( async () => {
 
@@ -33,6 +37,17 @@ const CreatePost = ({ userAvatar }) => {
         setVisible(true)    
     }
 
+    const handleEmojClick = () => {
+        setDisplayEmoj(!displayEmoj)
+    }
+
+    const onEmojiClick = (event, emojiObject) => {
+    
+        setPostContent(prev => prev+emojiObject.emoji)    
+ 
+      
+      }
+    
     const handlePostPic = (e) => {
 
   
@@ -98,8 +113,14 @@ const CreatePost = ({ userAvatar }) => {
  
                 <div style={{display:'flex',flexDirection:'column',width:'80%'}}>
                     <textarea name="content" onChange = {handleChange} value={postContent} onFocus={handleFocus}  className="post-input-field" placeholder="what's happening?" />
+                    {
+                    location !== 'from-modal' &&
+                    <>
                     <div className={visible?'who-see show':'hide'}><span><FontAwesomeIcon icon={faGlobe}/></span><span>Everyone can replay</span></div>
                     <hr className={visible?'show':'hide'}></hr>
+                    </>
+                    }
+                    
                     {
                     postPic && 
                     <img
@@ -123,25 +144,50 @@ const CreatePost = ({ userAvatar }) => {
                     <div className="post-control-icons">
                         <div>
                             <input id="image-post" type='file' accept="audio/*,video/*,image/*" style={{display:'none'}} onChange={handlePostPic}/>
+                            { location !== 'from-modal' &&
+
                             <label style={{cursor:'pointer'}} htmlFor="image-post" onClick = {() => {setPostVideo(true) ;setPostPic(true)}}>
                                 <FontAwesomeIcon icon={faPhotoVideo}/>
                             </label>
+                            }
                         </div>
+                        { location !== 'from-modal' &&
+                        <>
                         <div><FontAwesomeIcon icon={faPoll}/></div>
-                        <div><FontAwesomeIcon icon={faSmile}/></div>
+                        <div onClick={handleEmojClick}><FontAwesomeIcon icon={faSmile}/></div>
                         <div><FontAwesomeIcon icon={faClock}/></div>
                         <div></div>
+
+
+                        </>
+
+}
                          
                     </div>    
                     <div className="tweet-button">
                         <TwitterLargeButton width="150px" type = 'submit'  title="Tweet" />
                     </div>
                 </div>
+                
                 </div>
                 
                 </div>
 
             </form>
+            <div style={{
+                borderRadius: '0',
+                position: 'absolute',
+                top: '100px',
+                left: '220px',
+                textAlign: 'center',
+                zIndex:'211',
+                display: displayEmoj?'block':'none'
+                }}>
+                
+                <Picker  onEmojiClick={onEmojiClick} skinTone={SKIN_TONE_MEDIUM_DARK}/>
+            
+            </div>
+
         </>
     )
 }

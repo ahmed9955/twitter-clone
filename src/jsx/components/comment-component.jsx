@@ -9,16 +9,13 @@ import { setPostDetails, setReplayContent, setTwitterReplayVisibility } from '..
 import CommentModal from './comment-modal'
 import '../../styles/components/comment.scss'
 import { withRouter } from 'react-router'
-import { setReplayLike } from '../../apiClient/replay'
+import { setReplayDisLike, setReplayLike } from '../../apiClient/replay'
 import io from 'socket.io-client'
 
 const socket = io('http://localhost:2000')
 
 
 class Comment extends React.Component {
-
-    // const [liked, setLiked] = useState(false)
-    // const [likesNum, setLikesNum] = useState(likes?likes.length:'')
 
     constructor(){
         super()
@@ -65,13 +62,15 @@ class Comment extends React.Component {
                 sender: {
                 
                 name: this.props.user_id.user.profileName,
-                avatar: this.props.user_id.user.avatar
+                avatar: this.props.user_id.user.avatar,
+                content: this.props.content
 
             }, 
-                reciever: this.props.profileName.id, 
-                notification: `likes your replay ${this.props.content}`})
+                reciever: this.props.profileName.creator_id._id , 
+                notification: `likes your replay`})
 
             console.log(like, 'like comment')
+            socket.emit('notificationsCount', this.props.profileName.creator_id._id)
 
         } else {
             
@@ -79,28 +78,46 @@ class Comment extends React.Component {
 
             socket.emit('notifications', {sender: {
                 name: this.props.user_id.user.profileName,
-                avatar: this.props.user_id.user.avatar
+                avatar: this.props.user_id.user.avatar,
+                content: this.props.content
             },
-                reciever: this.props.profileName.id , notification: `likes your comment ${this.props.content}`})
+                reciever: this.props.profileName.creator_id._id , notification: `likes your comment`})
 
-            console.log(like)
+                socket.emit('notificationsCount', this.props.profileName.creator_id._id)
     
         }
         
         if (like.like || like.likes){
 
             await this.setState({liked: true})
-            await this.setState({likesNumText: this.state.likes.length+1})
-
+            await this.setState({likesNumText: this.state.likesNumText+1})
 
         } else {
             if (this.props.type === 'comment'){
                 const dislike = await setCommentDislike(this.props._id)
+    
                 if (dislike.success){
                     console.log(dislike)
                     await this.setState({liked: false})
-                    await this.setState({likesNumText: this.state.likes.length-1 == -1 ?0:this.state.likes.length-1})
-                  
+                
+                    await this.setState({likesNumText: this.state.likes.length === this.state.likesNumText?this.state.likes.length-1:this.state.likes.length})
+                    
+                    await this.setState({likes: this.state.likes})
+    
+
+                }
+            } else{
+
+                const dislike = await setReplayDisLike(this.props._id)
+                
+                
+                if (dislike.success){
+
+
+                    await this.setState({liked: false})                
+                    await this.setState({likesNumText: this.state.likes.length === this.state.likesNumText?this.state.likes.length-1:this.state.likes.length})
+                    await this.setState({likes: this.state.likes})
+        
                 }
             }
             
@@ -117,8 +134,11 @@ class Comment extends React.Component {
         this.props.setReplayContent({
             post_id: this.props._id,
             post_content: this.props.content,
+            avatar: this.props.media,
+            profileName: this.props.profileName.profileName,
             type: 'replay',
-            creator_id_for_comment: this.props.creator
+            creator_id_for_comment: this.props.creator,
+            user_avatar: this.props.user_id.user.avatar,
         })
 
     }
@@ -155,7 +175,7 @@ class Comment extends React.Component {
 render(){
     
     const {content, media,profileName, _id, replays} = this.props
-    const {liked} = this.state
+    const { liked } = this.state
 
     return(
         <>

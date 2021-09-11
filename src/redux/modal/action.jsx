@@ -44,3 +44,14 @@ export const setPostDetails = (details) => ({
     type: types.SET_POST_DETAILS,
     payload: details
 })
+
+
+export const setTweetModalVisibility = (display) => ({
+    type: types.SET_TWEET_MODAL_VISIBILITY,
+    payload: display
+})
+
+export const setFontWeightSeen = (seen) => ({
+    type: types.SET_FONT_WEIGHT_SEEN,
+    payload: seen
+})

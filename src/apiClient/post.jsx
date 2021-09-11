@@ -197,3 +197,34 @@ export const Comments = async (id) => {
     return result
 
 }
+
+
+export const likedposts = async (id) => {
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+
+};
+
+    const response = await fetch(`${URL}/likedposts/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+
+}
+
+export const mediaposts = async (id) => {
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+
+};
+
+    const response = await fetch(`${URL}/mediaposts/${id}`, requestOptions)
+    const result = await response.json()
+
+    return result
+
+}

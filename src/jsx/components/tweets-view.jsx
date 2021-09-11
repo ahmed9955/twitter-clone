@@ -50,7 +50,7 @@ render(){
             <div className='tweets-container'>
                 <CreatePost />
                 
-                {this.state.newFeeds.map(post => <Post creator = {post.user}  id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
+                {this.state.newFeeds.map(post => <Post creator = {post.user} created_at = {post.createdAt}  id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
                 
             </div>
 
@@ -63,8 +63,8 @@ render(){
                         <a href = "/home/whotofollow" style={{
                             textDecoration: 'none',
                             textAlign: 'start',
-                            position: 'relative',
-                            top: '75px',
+                            position: 'absolute',
+                            top: '310px',
                             borderRadius: '20px',
                             fontSize: '15px',
                             color: '#1D9BF0',
@@ -75,6 +75,20 @@ render(){
                         </a>
 
                     </div>
+                <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    width: '350px',
+                    
+            }}>
+
+                    <a className="policy">Terms of Service</a>
+                    <a className="policy">Privacy Policy</a>
+                    <a className="policy">Cookie Policy</a>
+                    <a className="policy">Ads info</a>
+                    <span className="policy-span">© 2021 Twitter, Inc.</span>
+
+                </div>
             </div>
 
         </div>
@@ -86,7 +100,7 @@ render(){
 
 const mapStateToProps = (state) => ({
     replayContent: state.modal.replayContent,
-    
+       
 })
 
 

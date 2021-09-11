@@ -51,12 +51,12 @@ class Explore extends React.Component {
             <div className='tweets-container' style={{flex: '2'}}>
                 <CreatePost />
                 
-                {this.state.newFeeds.map(post => <Post id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar}/>)}
+                {this.state.newFeeds.map(post => <Post creator = {post.user}  id={post._id} content={post.content} media={post.avatar} created_at={post.createdAt} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
                 
             </div>
 
-            <CommentModal user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
- 
+            <CommentModal creator_id = {this.props.replayContent.creator_id} user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
+
             <div style = {{flex:'1',paddingLeft:'20px'}}>
                     <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
@@ -64,8 +64,8 @@ class Explore extends React.Component {
                         <a href = "/home/whotofollow" style={{
                             textDecoration: 'none',
                             textAlign: 'start',
-                            position: 'relative',
-                            top: '75px',
+                            position: 'absolute',
+                            top: '320px',
                             borderRadius: '20px',
                             fontSize: '15px',
                             color: '#1D9BF0',
@@ -76,6 +76,20 @@ class Explore extends React.Component {
                         </a>
 
                     </div>
+                    <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    width: '350px',
+                    
+            }}>
+
+                    <a className="policy">Terms of Service</a>
+                    <a className="policy">Privacy Policy</a>
+                    <a className="policy">Cookie Policy</a>
+                    <a className="policy">Ads info</a>
+                    <span className="policy-span">© 2021 Twitter, Inc.</span>
+
+                </div>
             </div>
             </div>
             

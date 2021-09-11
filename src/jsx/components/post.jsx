@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../styles/components/post.scss'
-import { FavoriteBorder, FavoriteRounded,CommentOutlined, ShareOutlined } from '@material-ui/icons';
+import { FavoriteBorder, FavoriteRounded,CommentOutlined, ShareOutlined, VerifiedUser, VerifiedUserRounded, VerifiedUserSharp, VerifiedUserTwoTone } from '@material-ui/icons';
 import { faRetweet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setPostDetails, setReplayContent, setTwitterReplayVisibility } from '../../redux/modal/action';
@@ -9,6 +9,7 @@ import { setLikedPost, setDisLikedPost } from '../../apiClient/post';
 import { withRouter } from 'react-router';
 import { profile } from '../../apiClient/user';
 import io from 'socket.io-client'
+import { timeDifference } from '../../apiClient/time-diffrence';
 
 const socket = io('http://localhost:2000')
 
@@ -20,7 +21,7 @@ class Post extends React.Component {
 
             flag: false,
             liked: false,
-            likesNum: '',
+            likesNum: 0,
             commentsNum:'',
             likesNumText:0,
             commentsNum:0
@@ -83,19 +84,24 @@ class Post extends React.Component {
         if (like.like){
 
             await this.setState({liked: true})
-            await this.setState({likesNumText: this.state.likesNum.length+1})
+            
+            
+            await this.setState({likesNumText: this.state.likesNumText+1})
+
 
             if (this.props.postDetails.creator_id){
 
                 socket.emit('notifications', {
                     sender: {
                         name: this.props.user_id.user.profileName,
-                        avatar: this.props.user_id.user.avatar
-                    
+                        avatar: this.props.user_id.user.avatar,
+                        content: this.props.content
                     }
                 
                 , reciever: this.props.postDetails.creator_id._id, 
-                notification: `likes your post ${this.props.content}`})
+                notification: `likes your post`})
+                    
+                socket.emit('notificationsCount', this.props.postDetails.creator_id._id)
             
             } else {
 
@@ -103,13 +109,16 @@ class Post extends React.Component {
                     sender:{
                         
                         name: this.props.user_id.user.profileName,
-                        avatar: this.props.user_id.user.avatar
+                        avatar: this.props.user_id.user.avatar,
+                        content: this.props.content
                     
                     }, 
                     reciever: this.props.id_user , 
-                    notification: `likes your post ${this.props.content}`})
+                    notification: `likes your post`})
 
-            }
+                    socket.emit('notificationsCount', this.props.id_user)
+
+                }
 
             
 
@@ -119,8 +128,10 @@ class Post extends React.Component {
             if (dislike.success){
 
                 await this.setState({liked: false})
-                await this.setState({likesNumText: this.state.likesNum.length-1 == -1 ?0:this.state.likesNum.length-1})
-              
+                
+                await this.setState({likesNumText: this.state.likesNum.length === this.state.likesNumText?this.state.likesNum.length-1:this.state.likesNum.length})
+                
+                await this.setState({likesNum: this.state.likesNum})
             }}
 
        
@@ -140,7 +151,8 @@ class Post extends React.Component {
             profileName,
             avatar,
             comments,
-            creator
+            creator,
+            created_at
 
         } = this.props
 
@@ -153,7 +165,8 @@ class Post extends React.Component {
             profileName,
             avatar,
             comments,
-            creator_id: creator
+            creator_id: creator,
+            created_at
         })
     }
 
@@ -167,7 +180,7 @@ class Post extends React.Component {
     
 render(){
 
-    const { profileName, avatar, content, media } = this.props
+    const { profileName, avatar, content, media, created_at } = this.props
 
     return(
     
@@ -175,9 +188,9 @@ render(){
             <div  className="post-container" onClick={this.handlePostClick}>
                 <div className="post-owner">
                     <img onClick = {this.handlePostImgClick} style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
-                    <span>{profileName}</span>
+                    <span>{profileName} <span style={{fontWeight: 'normal', position:'relative', top: '1px', color: '#1991DA'}} > <VerifiedUserTwoTone/>@{profileName} { timeDifference(created_at) }</span></span>
                 </div>
-                <input className="post-content" value={content} readOnly />
+                <input className="post-content" value={content} style={{backgroundColor: 'inherit', cursor: 'pointer'}} readOnly />
                 {
                 media?
                 !media.endsWith('.mp4') && media 
@@ -189,7 +202,7 @@ render(){
                         style={{border: '1px solid #cccc',borderRadius:'20px',marginLeft:'40px',marginRight:'40px'}}>
                     </img> : ''
                 }
-                
+
                 {
                 media?
                 media.endsWith('.mp4') && 

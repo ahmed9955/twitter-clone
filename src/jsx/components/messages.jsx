@@ -1,13 +1,17 @@
 import React from 'react'
 import '../../styles/components/messages.scss'
-import { SendRounded } from '@material-ui/icons'
+import { SendRounded, FaceRounded, EmojiFlags, EmojiEmotionsSharp } from '@material-ui/icons'
 import io from 'socket.io-client'
 import { followers } from '../../apiClient/follow'
 import { connect } from 'react-redux'
 import { profile } from '../../apiClient/user'
 import LeftChat from './left-chat-message'
 import RightChat from './right-chat-message'
-import { chat } from '../../apiClient/chat'
+import { chat, chatShowMessage } from '../../apiClient/chat'
+import modal from './modal'
+import { setFontWeightSeen } from '../../redux/modal/action'
+import Picker, { SKIN_TONE_MEDIUM_DARK } from 'emoji-picker-react';
+
 
 const socket = io('http://localhost:2000')
 
@@ -23,14 +27,20 @@ class Messages extends React.Component {
             sentContent: {
                 sender:'',
                 reciever:'',
-                message: ''
+                message: '',
+                color: 'black',
+                fontWeight: 'bold'
             },
             chat: [],
             textmessage:'',
             clients: [],
             current_user:'',
             lastmessage:'',
-            allchats: []
+            allchats: [],
+            colorSeen: '#636363',
+            fontWeightSeen: 'normal',
+            displayEmoj: false
+
         }
     }
 
@@ -40,7 +50,6 @@ class Messages extends React.Component {
         const user = await profile(localStorage.token)
         await this.setState({current_user: user})
 
-        console.log('current user', this.state.current_user)
 
         await this.setState({sentContent: {
             ...this.state.sentContent, 
@@ -55,16 +64,17 @@ class Messages extends React.Component {
 
         await this.setState({ clients: follwers })
 
-        console.log(this.state.clients)
         
-        socket.on('message', ({ sender, reciever, message}) => {
-            
-            this.setState({chat:[...this.state.chat, {message, sender,reciever}]}, () => this.scrollToMyRef())
+        socket.on('message', ({ sender, reciever, message, color, fontWeight}) => {
+                
+            this.setState({chat:[...this.state.chat, {message, sender,reciever,fontWeight, color}]}, () => this.scrollToMyRef())
+
         })
 
         const chats = await chat()
 
         this.setState({allchats: chats})
+
 
     }
 
@@ -79,10 +89,10 @@ class Messages extends React.Component {
 
 
                 const obj = messages[messages.length-1]
-
+                
                 if (obj){
-                    
-                    return obj.message
+                
+                 return obj
                 }
        
         }
@@ -123,8 +133,10 @@ class Messages extends React.Component {
         
             await this.setState({chat: chatArray}, ()=> this.scrollToMyRef())
 
+            await chatShowMessage(id)
+            
     }
-    }
+}
 
 
 
@@ -132,34 +144,49 @@ class Messages extends React.Component {
         e.stopPropagation()
 
 
-        const {sender,reciever , message} = this.state.sentContent
+        if (this.state.textmessage === '') return
+        this.setState({displayEmoj: false})
 
-        socket.emit('message', {sender, reciever, message})
+        const {sender,reciever , message, fontWeight, color} = this.state.sentContent
+
+        socket.emit('message', {sender, reciever, message, fontWeight, color })
 
         this.setState({textmessage: ''})
 
-    
+        
     }
 
 
     handleChange = (e) => {
         const {name, value} = e.target
         
-        this.setState({textmessage: value})
+        this.setState( {textmessage: value} )
         this.setState({sentContent:{...this.state.sentContent,[name]: value}})
 
-        console.log(this.state.sentContent)
+
+    }
+    
+
+    handleEmojClick = (e) => {
+        e.stopPropagation()
+
+        this.setState({displayEmoj: !this.state.displayEmoj})
+    }
+
+    onEmojiClick = async (event, emojiObject) => {
+        
+         this.setState( {textmessage: this.state.textmessage+emojiObject.emoji} )
+         await this.setState({sentContent: {...this.state.sentContent, message:this.state.textmessage+emojiObject.emoji}})
 
     }
 
-    
     scrollToMyRef = () => {
         const scroll =
           this.chatContainer.current.scrollHeight -
           this.chatContainer.current.clientHeight;
           this.chatContainer.current.scrollTo(0, scroll);
       };
-    
+
 
     
     render(){
@@ -173,7 +200,7 @@ class Messages extends React.Component {
                     
                         <div className="reciever-account">
                             <img src = {this.state.sentContent.reciever.avatar} />
-                            <span>{this.state.sentContent.reciever.name}</span>
+                            <span style={{fontWeight: this.state.fontWeightSeen, color: this.state.colorSeen,fontFamily: 'monospace'}}>{this.state.sentContent.reciever.name}</span>
                         </div>
                         
                         <div ref={this.chatContainer} className="message-history" >
@@ -199,22 +226,27 @@ class Messages extends React.Component {
                         <div className="write-text-message">
                            <input autocomplete="off" value={this.state.textmessage} placeholder="Type a messsage" onChange={this.handleChange} name="message" />
                            <span onClick={this.handleSend} >
-                            <SendRounded  />
+                            <span onClick={this.handleEmojClick}>
+                                <EmojiEmotionsSharp />
+                            </span>
+                            <SendRounded />
                            </span> 
                         </div>
-                        
+                
                     </div>
                 </div>:<div className="messages-view"></div>}
                 <div className="users-view">
                     <div style={{fontSize:'25px', padding: '20px', borderBottom:'1px solid #cccc', fontWeight:'bold'}} >Chat</div>
                     {this.state.clients.map( (client, key) => (
                         <div style={{
-                            display:'flex'
+                            display:'flex',
                         }} key={key} className="reciever-account" onClick={ () => this.handleStoreReciever(client._id, client.profileName, client.avatar)}>
                         <img src={client.avatar} />
                         <div>
-                            <div>{client.profileName}</div>
-                            <div>{ this.handleLastMessage(client)? this.handleLastMessage(client).slice(0,10)+'....':'' }</div>
+                            <div style={{                            
+                            fontFamily:'monospace',
+                            }}>{client.profileName}</div>
+                            <div style={{color: this.state.colorSeen, fontWeight: this.props.fontWeightSeen ,fontSize: '16px'}}>{ this.handleLastMessage(client)? this.handleLastMessage(client).message.slice(0,10)+'....':'' }</div>
                         </div>
                     </div>
                     )) 
@@ -222,6 +254,20 @@ class Messages extends React.Component {
                 </div>  
             
             </div>
+            <div style={{
+                borderRadius: '0',
+                position: 'absolute',
+                top: '280px',
+                left: '300px',
+                textAlign: 'center',
+                zIndex:'211',
+                display: this.state.displayEmoj?'block':'none'
+                }}>
+                
+                <Picker  onEmojiClick={this.onEmojiClick} skinTone={SKIN_TONE_MEDIUM_DARK}/>
+            
+            </div>
+
             </>
 
         )
@@ -230,7 +276,12 @@ class Messages extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user.user
+    user: state.user.user,
+    fontWeightSeen: state.modal.fontWeightSeen
 })
 
-export default connect(mapStateToProps)(Messages)
+const mapDispatchToProps = (dispatch) => ({
+    setFontWeightSeen: seen => dispatch(setFontWeightSeen(seen))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages)

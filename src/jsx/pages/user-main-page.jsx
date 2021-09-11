@@ -44,7 +44,7 @@ render(){
                 <Switch>
                     <Route exact path = '/home' component={TweetsView} />
                     <Route exact path = '/home/messages' component={Messages} />
-                    <Route exact path = '/home/profile/:id' component={Profile} />
+                    <Route path = '/home/profile/:id' component={Profile} />
                     <Route path = '/home/explore' component={Explore}/>
                     <Route path = '/home/notification' component={Notifications}/>
                     <Route path = '/home/post_details' component={PostDetails}/>

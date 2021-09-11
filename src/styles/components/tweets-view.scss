@@ -5,3 +5,22 @@
     border-right: 1px solid #cccc;
     background-color: #F7F9F9;
 }
+
+.policy{
+    margin: 8px;
+    text-decoration: none;
+    color: gray;
+    font-size: 14px;
+    &:hover{
+        cursor: pointer;
+        color: gray;
+        
+    }
+}
+
+.policy-span{
+    margin: 8px;
+    text-decoration: none;
+    color: gray;
+    font-size: 14px;
+}

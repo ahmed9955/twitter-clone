@@ -35,7 +35,7 @@ render(){
     return(
         <>
         <div style={{display:'flex', flexDirection:'column', }}>
-          <Post creator = {this.props.postDetails.creator_id}  {...this.props.postDetails} />
+          <Post  creator = {this.props.postDetails.creator_id}  {...this.props.postDetails} />
         
           {
               this.state.comments.map(({content, _id,like, replays, user}) =>  <Comment  creator = {user._id}   type= 'comment' likes={like} replays={replays} media = {user.avatar} profileName = {this.props.postDetails}  content= {content} _id={_id} />)
@@ -43,7 +43,8 @@ render(){
           }
         </div>
 
-        <CommentModal  user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
+        {/* <CommentModal  user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />    */}
+        <CommentModal creator_id = {this.props.replayContent.creator_id} user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
 
         </>
     )

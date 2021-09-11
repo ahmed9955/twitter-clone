@@ -169,13 +169,36 @@ export const avatar = async (token) => {
   return avatar.avatar
 }
 
+
+export const uploadPortrait = async (file, fileName) => {
+
+  var formdata = new FormData()
+
+  formdata.append("portrait", file, fileName)
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      "Authorization": localStorage.token
+    },
+    body: formdata,
+    redirect: 'follow'
+  }
+  
+  const response = await fetch(`${URL}/portrait`, requestOptions)
+  const portrait = await response.json()
+
+  return portrait.portrait
+}
+
+
 export const uploadAvatar = async (file, fileName, token) => {
   
   var formdata = new FormData();
 
   formdata.append("avatar", file, fileName);
 
-  var requestOptions = {
+  const requestOptions = {
     method: 'POST',
     headers: {
       "Authorization": token
