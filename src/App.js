@@ -12,26 +12,27 @@ import './styles/mediaQuery/mediaQuery.scss'
 
 class App extends React.Component {
 
-  render(){
-  return (
-    <div className="App">
+  render() {
 
-      <Switch>
-        <Route exact path='/' >
-          {
-            localStorage.getItem('token') ? <Redirect to="/home"/> : <LandingPage />
-          }
+    return (
+      <div className="App">
 
-        </Route>
+        <Switch>
+          <Route exact path='/' >
+            {
+              localStorage.getItem('token') ? <Redirect to="/home" /> : <LandingPage />
+            }
 
-        
-        <Route path='/login' component={SignIn} />
-        <Route path= '/home' component={UserMainPage} />
-        <Route path = '/resetPassword' component = { ResetPasswordPage } />
+          </Route>
 
-      </Switch>
-    
-    </div>
+
+          <Route path='/login' component={SignIn} />
+          <Route path='/home' component={UserMainPage} />
+          <Route path='/resetPassword' component={ResetPasswordPage} />
+
+        </Switch>
+
+      </div>
     )
   }
 }
