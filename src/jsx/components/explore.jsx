@@ -93,6 +93,7 @@ class Explore extends React.Component {
                     
             }}>
 
+
                     <a className="policy">Terms of Service</a>
                     <a className="policy">Privacy Policy</a>
                     <a className="policy">Cookie Policy</a>
@@ -102,9 +103,12 @@ class Explore extends React.Component {
                 </div>
             </div>
             </div>
-            
+
+    
             </>
+        
         )
+
     }
 }
 

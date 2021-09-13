@@ -23,7 +23,7 @@ export const createNewPost = async (content,file,fileName,token) => {
  const response = await fetch(`${URL}/post`, requestOptions)
  const post = await response.json()
 
- console.log(post)
+  return post
 }
 
 

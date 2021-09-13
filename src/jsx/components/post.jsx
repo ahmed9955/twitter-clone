@@ -217,7 +217,7 @@ render(){
             <div  className="post-container"  onClick={this.handlePostClick}>
                 <div className="post-owner">
                     <img onClick = {this.handlePostImgClick} style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
-                    <span>{profileName} <span style={{fontWeight: 'normal', position:'relative', top: '1px', color: '#1991DA'}} > <VerifiedUserTwoTone/>@{profileName} { timeDifference(created_at) }</span></span>
+                    <span>{profileName} <span style={{fontWeight: 'normal', position:'relative', top: '1px', color: '#1991DA'}} > <VerifiedUserTwoTone/>@{profileName} {  timeDifference(created_at) }</span></span>
                 </div>
                 <div className="post-content"  style={{
                     backgroundColor: 'inherit',
@@ -241,11 +241,12 @@ render(){
                 media.endsWith('.mp4') && 
                 
                     <video
+                        muted
                         controls
                         src={media} 
                         height='280px' 
                         width='85%'
-                        style={{borderRadius:'20px', marginRight:'35px'}}
+                        style={{borderRadius:'20px', marginLeft:'40px'}}
                         onClick={(e) => e.stopPropagation()}
                         >
                     </video> : '' 

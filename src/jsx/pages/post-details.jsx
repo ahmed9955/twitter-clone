@@ -83,7 +83,7 @@ class PostDetails extends React.Component {
                             likes={like} 
                             replays={replays} 
                             media={user.avatar} 
-                            profileName={this.state.postDetails.user} 
+                            profileName={user} 
                             content={content} 
                             _id={_id} 
                             postId={post}

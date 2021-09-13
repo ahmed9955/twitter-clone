@@ -284,6 +284,29 @@ export const getOneUser = async (id) => {
   
   }
 
+  export const searchUsers = async (q) => {
 
+
+    var requestOptions = {
+   
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.token
+
+      }
+
+    };
+  
+   const response = await fetch(`${URL}/searchusers?search=${q}`, requestOptions)
+   
+   const result = await response.json() 
+  
+  
+   return result
+   
+  }
+  
 
 

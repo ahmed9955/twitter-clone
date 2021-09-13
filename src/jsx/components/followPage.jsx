@@ -45,7 +45,7 @@ const FollowPage = ({match}) => {
                     {
                         followersTab &&
                         
-                        <FollowersTab/>
+                        <FollowersTab/  >
                     }
 
                     { 

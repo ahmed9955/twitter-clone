@@ -1,3 +1,6 @@
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Twitter } from '@material-ui/icons'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router'
@@ -21,12 +24,24 @@ import WhoToFollow from './whotofollow-page'
 
 class UserMainPage extends React.Component {
 
+    constructor(){
+        super()
+
+        this.state = {
+            loading: true
+        }
+    }
+
     async componentDidMount(){
 
         const token = localStorage.getItem('token') 
         
         const currentUser = await profile(token)
         
+        if (currentUser ){
+            this.setState({loading: false})
+        }     
+
         this.props.setNewUser(currentUser)
         
         console.log(this.props.user)
@@ -37,6 +52,22 @@ render(){
 
     return(
         <>  
+
+        {
+            this.state.loading?<div style ={{
+                backgroundColor: '#1991DA', 
+                width:"100vw", 
+                height: '100vh',
+                color: 'white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '80px'
+        
+        }}> <FontAwesomeIcon icon={faTwitter} /> </div>
+            
+            :
+            
             <div style={{display:'flex',flexDirection:'row'}}>
                 <div style={{ position:'fixed',zIndex:'20' }}>
                  <SideNavBar />
@@ -58,6 +89,10 @@ render(){
                 </Switch>
             </div> 
             </div>
+        
+        
+        }    
+        
         </>
     )
 }

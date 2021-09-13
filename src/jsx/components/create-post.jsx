@@ -76,7 +76,7 @@ const CreatePost = ({ userAvatar, location }) => {
         
     }
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         if (
@@ -86,13 +86,17 @@ const CreatePost = ({ userAvatar, location }) => {
                 return
             }
         
-        createNewPost(postContent,uploadPostPic,fileName,localStorage.getItem('token'))      
-        setPostContent('')
-        setPostPic(false)
-        setPostVideo(false)
-        setVisible(false)
+        const post = await createNewPost(postContent,uploadPostPic,fileName,localStorage.getItem('token'))      
         
-        window.location.reload()
+        if(post){
+
+            setPostContent('')
+            setPostPic(false)
+            setPostVideo(false)
+            setVisible(false)            
+            window.location.reload()
+    
+        }
     }
 
    const handleChange = (e) => {

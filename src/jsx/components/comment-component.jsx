@@ -140,6 +140,7 @@ class Comment extends React.Component {
         this.props.setTwitterReplayVisibility(true)
 
         this.props.setReplayContent({
+
             post_id: this.props._id,
             post_content: this.props.content,
             avatar: this.props.media,
@@ -147,6 +148,7 @@ class Comment extends React.Component {
             type: 'replay',
             creator_id_for_comment: this.props.creator,
             user_avatar: this.props.user_id.user.avatar,
+        
         })
 
     }

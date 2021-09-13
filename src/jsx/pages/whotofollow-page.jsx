@@ -2,6 +2,7 @@ import React from 'react'
 import { whoToFollow } from '../../apiClient/follow'
 import { profile } from '../../apiClient/user'
 import FollowComponent from '../components/follow-component'
+import Search from '../components/search'
 
 class WhoToFollow extends React.Component {
 
@@ -32,6 +33,7 @@ render(){
             <>
                 <div style={{ width:'78vw'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
+                        <Search />
                         {this.state.followers.map( user => <FollowComponent  {...user}  />)}
                 </div>
             </>

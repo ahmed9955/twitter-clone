@@ -29,13 +29,13 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
 })
 
-    const handleClick = () => {
+    const handleClick = async () => {
 
         socket.emit('notifications', {sender: '', reciever: '', notification: ''})        
 
         if (type === 'replay'){
             
-            addReplayToReplay(comment, post_id)
+             addReplayToReplay(comment, post_id)
 
                 
                 socket.emit('notifications', {sender:{
@@ -47,6 +47,10 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
                 socket.emit('notificationsCount', replayContent.creator_id_for_comment)
 
+                setComment('')
+                setTwitterReplayVisibility(false)
+                setTimeout(()=> {window.location.href = `http://localhost:3000/home/comment_details/${post_id}` }, 1000)
+    
 
         } else {
 
@@ -65,6 +69,11 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
                     , reciever: creator_id._id, notification: 'comment on your post'})
 
                     socket.emit('notificationsCount', creator_id._id)
+
+                    setComment('')
+                    setTwitterReplayVisibility(false)
+                    setTimeout(()=> {window.location.href = `http://localhost:3000/home/post_details/${post_id}` }, 1000)
+        
             } else {
 
                 socket.emit('notifications', {sender: {
@@ -77,13 +86,16 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
                     socket.emit('notificationsCount', replayContent.creator_id._id)
 
+                    setComment('')
+                    setTwitterReplayVisibility(false)
+                    setTimeout(()=> {window.location.href = `http://localhost:3000/home/post_details/${post_id}` }, 1000)
+        
             }
 
         }
         
-        setComment('')
-        setTwitterReplayVisibility(false)
-        window.location.reload()
+
+    
     }
 
     const handleChange = (e) => {
@@ -106,7 +118,7 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
     return(
         <>
-            <Modal height="fit-content" display= { displayReplayVisibility }  >
+            <Modal  display= { displayReplayVisibility }  >
                 <div>
                     <div>
 
@@ -120,7 +132,7 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
                 </div>
 
                 <div style={{float:'right', width: '90%', wordWrap: 'break-word', }} >
-                    {post_content}
+                    {post_content.substring(0, 200)}....
                 </div>
                 </div>
                 <div style={{display: 'flex', flexDirection:'row',marginTop:'109px'}}>

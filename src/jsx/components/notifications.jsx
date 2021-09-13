@@ -70,7 +70,7 @@ class Notifications extends React.Component {
                         }}>Notifications</div>
                         {
                             this.state.notifications.map(({ sender, reciever, notification, _id, color }, index) => (
-                                <div style={{ backgroundColor: color, marginBottom: '8px',flex: '1' , boxShadow: color === 'skyblue'?'5px 5px #888888':'5px 5px #FFFF'}} onClick={(e) => this.handleClick(e, _id, sender.postId, sender.commentId)}>
+                                <div style={{ backgroundColor: color, marginBottom: '8px' , boxShadow: color === 'skyblue'?'5px 5px #888888':'5px 5px #FFFF', height: '100px'}} onClick={(e) => this.handleClick(e, _id, sender.postId, sender.commentId)}>
                                     <img src={sender.avatar} width='52px' height='52px' />
                                     <div onClick={(e) => e.stopPropagation()} style={{ 
                                         display: 'flex', 

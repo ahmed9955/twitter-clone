@@ -20,5 +20,7 @@
         margin: 32px auto;
         z-index: 2000;
         border-radius: 15px;
+        height: -moz-fit-content;
+        height: fit-content;
     }
 }

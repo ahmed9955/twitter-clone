@@ -54,11 +54,18 @@ const handleUnfollowClick = () => {
 }
 
 
+const handleClick = (e, id) => {
+
+    e.stopPropagation()
+    window.location.href = `http://localhost:3000/home/profile/${id}`
+}
+
+
     return(
 
         <>
          <div style={{display:'flex',margin:'20px',width:'90%'}}>
-                <img style={{borderRadius:'50%'}} width='48px' height='48px' src={avatar} />
+                <img onClick={(e) => handleClick(e,_id)} style={{borderRadius:'50%', cursor: 'pointer'}} width='48px' height='48px' src={avatar} />
                  <div style={{flex:'1',marginLeft:'10px',display:'flex', flexDirection:'column'}}>
                     <span>{profileName}</span>
                     <span style={{fontFamily: 'sans-serif', color: 'gray'}}>@{profileName}</span>

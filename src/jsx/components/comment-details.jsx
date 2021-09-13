@@ -66,6 +66,7 @@ class CommentDetails extends React.Component {
                                     replays={comments}
                                     commentId = {comment}
                                     created_at = {createdAt}
+                                    
                                 />
                             </div>
 

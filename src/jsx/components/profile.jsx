@@ -15,7 +15,8 @@ import Likes from './likes'
 import Media from './media'
 import Tweets from './tweets'
 import TweetsAndReplies from './tweets&replies'
-
+import {profilePlace} from  '../../assets/profile.png'
+import Search from './search'
 
 class Profile extends React.Component {
 
@@ -105,7 +106,7 @@ render() {
                     <div className="profile-picture-rounded">
                         <input id="upload_avatar" onChange={this.handleAvatar} style={{display: 'none'}} type='file' accept='image/*' />
                         <label style={{cursor:'pointer'}} for='upload_avatar'>
-                            <img src={this.state.avatarProfile} style={{borderRadius:'50%', border: '5px solid #ffff'}} width='130px' height='130px' />
+                            <img src={this.state.avatarProfile?this.state.avatarProfile: 'https://pbs.twimg.com/profile_images/1429509461320818689/kAYGSvpx_400x400.png'} style={{borderRadius:'50%', border: '5px solid #ffff'}} width='130px' height='130px' />
                         </label>
                         <div style={{textAlign:'start'}}>
                             <div style={{fontWeight: 'bold', fontSize: '20px'}}>{this.state.current_user.profileName}</div>
@@ -160,7 +161,6 @@ render() {
             </div>
    
             <div style = {{flex:'1',paddingLeft:'20px'}}>
-
                     <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
                         {this.state.followers.map((user, index) => index <4? <FollowComponent  {...user}  />: '')}

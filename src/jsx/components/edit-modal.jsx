@@ -55,7 +55,7 @@ class EditModal extends React.Component {
         
         UpdateProfile(raw)
         this.props.setEditModalVisibility(false)
-        window.location.reload()
+        setTimeout(() => window.location.reload() , 1000)    
     }
 
 

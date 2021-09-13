@@ -23,7 +23,7 @@ const Modal = ({setEditModalVisibility ,height,setModalVisibility,setPrivacyVisi
                 setEditModalVisibility(false)
 }} />
 
-            <div className="modal-body" style={{height}} >
+            <div className="modal-body" >
                 <span style={{fontSize:'20px',fontWeight:'bold'}}>{stepNumber}</span>
                 <div style={{textAlign:'center',fontSize:'35px',color:'white'}}><FontAwesomeIcon  icon={faTwitter}/></div>
                 <div style={{fontSize:'25px',fontWeight:'bold',color:'#000',marginBottom:'20px'}}>{title}</div>
