@@ -1,9 +1,15 @@
 .post-container{
+
     width: 598px;
     text-align: end;
     padding-right: 10px;   
-    padding-top: 10px;    
-    
+    padding-top: 10px;
+    word-wrap: break-word;    
+    text-align: start;
+    margin-bottom: 10px;
+    font-family: sans-serif;
+
+
     & img{
         cursor: pointer;
     }

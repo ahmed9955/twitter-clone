@@ -26,9 +26,9 @@ class Tweets extends React.Component {
         <>
         <div>
             {
-                this.state.userPosts.map(post => <Post created_at={post.createdAt} id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} /> )
+                this.state.userPosts.map(post => <Post creator = {post.user}  created_at={post.createdAt} id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} /> )
             }
-            <CommentModal  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />
+            <CommentModal   post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />
         </div>
         </>
     )

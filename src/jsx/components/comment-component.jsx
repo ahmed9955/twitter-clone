@@ -1,6 +1,6 @@
 import { faRetweet } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { CommentOutlined, FavoriteBorder, FavoriteRounded, ShareOutlined } from '@material-ui/icons'
+import { CommentOutlined, FavoriteBorder, FavoriteRounded, ShareOutlined, VerifiedUserTwoTone } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { setCommentDislike, setCommentLike } from '../../apiClient/comment'
@@ -11,6 +11,7 @@ import '../../styles/components/comment.scss'
 import { withRouter } from 'react-router'
 import { setReplayDisLike, setReplayLike } from '../../apiClient/replay'
 import io from 'socket.io-client'
+import { timeDifference } from '../../apiClient/time-diffrence'
 
 const socket = io('http://localhost:2000')
 
@@ -57,34 +58,40 @@ class Comment extends React.Component {
         
             like = await setReplayLike(this.props._id)            
             
+            if (!like.liked){
             socket.emit('notifications', {
                 
                 sender: {
                 
                 name: this.props.user_id.user.profileName,
                 avatar: this.props.user_id.user.avatar,
-                content: this.props.content
+                content: this.props.content,
+                commentId: this.props.commentId
 
             }, 
-                reciever: this.props.profileName.creator_id._id , 
+                reciever: this.props.profileName._id , 
                 notification: `likes your replay`})
 
             console.log(like, 'like comment')
-            socket.emit('notificationsCount', this.props.profileName.creator_id._id)
 
+            socket.emit('notificationsCount', this.props.profileName._id)
+        }
         } else {
             
             like = await setCommentLike(this.props._id)
+            
+            if(!like.liked) {
 
             socket.emit('notifications', {sender: {
                 name: this.props.user_id.user.profileName,
                 avatar: this.props.user_id.user.avatar,
-                content: this.props.content
+                content: this.props.content,
+                postId: this.props.postId
             },
-                reciever: this.props.profileName.creator_id._id , notification: `likes your comment`})
-
-                socket.emit('notificationsCount', this.props.profileName.creator_id._id)
-    
+                reciever: this.props.profileName._id , notification: `likes your comment`})
+            
+                socket.emit('notificationsCount', this.props.profileName._id)
+        }
         }
         
         if (like.like || like.likes){
@@ -95,9 +102,11 @@ class Comment extends React.Component {
         } else {
             if (this.props.type === 'comment'){
                 const dislike = await setCommentDislike(this.props._id)
-    
+                
+                console.log(dislike)
+
                 if (dislike.success){
-                    console.log(dislike)
+                    
                     await this.setState({liked: false})
                 
                     await this.setState({likesNumText: this.state.likes.length === this.state.likesNumText?this.state.likes.length-1:this.state.likes.length})
@@ -112,7 +121,6 @@ class Comment extends React.Component {
                 
                 
                 if (dislike.success){
-
 
                     await this.setState({liked: false})                
                     await this.setState({likesNumText: this.state.likes.length === this.state.likesNumText?this.state.likes.length-1:this.state.likes.length})
@@ -144,9 +152,7 @@ class Comment extends React.Component {
     }
 
     handleCommentClick = () => {
-
-        this.props.history.push('/home/comment_details')
-        
+       
         const {
 
             _id, 
@@ -169,12 +175,13 @@ class Comment extends React.Component {
 
         })
 
+        this.props.history.push(`/home/comment_details/${_id}`)
     }
 
 
 render(){
     
-    const {content, media,profileName, _id, replays} = this.props
+    const {content, media,profileName, _id, replays,created_at} = this.props
     const { liked } = this.state
 
     return(
@@ -184,8 +191,15 @@ render(){
                 <div style={{display:'flex',margin:'20px'}}>
                     <img style={{borderRadius:'50%'}} width='48px' height='48px' src={media}/>
                     <div style={{marginLeft:'10px',display:'flex', flexDirection:'column'}}>
-                    <span style={{ fontWeight: 'bold' }} >{profileName.profileName}</span>
-                    <input style={{ border:'none', outline:'none' }} value={content} readOnly />
+                    <span style={{ fontWeight: 'bold'}} >{profileName.profileName} <span style={{fontWeight: 'normal', position:'relative', top: '1px', color: '#1991DA'}} ><VerifiedUserTwoTone/>@{profileName.profileName} { timeDifference(created_at) }</span></span>
+                    <div style={{ 
+                        border:'none', 
+                        outline:'none', 
+                        textAlign:'start', 
+                        wordWrap: 'break-word', 
+                        fontFamily: 'sans-serif',
+                        width: '540px'  
+                    }}>{content}</div>
                 </div>
 
                 </div>
@@ -193,7 +207,7 @@ render(){
                    {this.props.type === 'comment' && <span onClick={this.handleComment} ><CommentOutlined />{replays?replays.length:''}</span>} 
                    <span><FontAwesomeIcon icon={faRetweet} />0</span>
                    <span onClick={this.handleLike} style = {{ color : liked  ?'#E44D77': 'black'}} >{ liked ?<FavoriteRounded/>:<FavoriteBorder />}<section>{this.state.likesNumText}</section></span>
-                   <span ><ShareOutlined/>0</span>
+                   <span ><ShareOutlined/></span>
                 </div>
         </div>
         </>

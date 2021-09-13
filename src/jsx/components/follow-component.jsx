@@ -61,7 +61,7 @@ const handleUnfollowClick = () => {
                 <img style={{borderRadius:'50%'}} width='48px' height='48px' src={avatar} />
                  <div style={{flex:'1',marginLeft:'10px',display:'flex', flexDirection:'column'}}>
                     <span>{profileName}</span>
-                    <span>@nameHash</span>
+                    <span style={{fontFamily: 'sans-serif', color: 'gray'}}>@{profileName}</span>
                 </div>
 
                 {type !== 'notUser' &&

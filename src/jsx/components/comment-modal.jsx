@@ -5,9 +5,11 @@ import { addReplayToReplay } from '../../apiClient/replay'
 import {  setTwitterReplayVisibility } from '../../redux/modal/action'
 import Modal from './modal'
 import TwitterLargeButton from './twitter-large-button'
-
+import Picker, { SKIN_TONE_MEDIUM_DARK } from 'emoji-picker-react';
 import io from 'socket.io-client'
 import { profile } from '../../apiClient/user'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSmile } from '@fortawesome/free-solid-svg-icons'
 
 const socket = io('http://localhost:2000')
 
@@ -16,6 +18,8 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
     const [comment , setComment] = useState('')
     const [current_user, setUser] = useState('')
+    const [displayEmoj, setDisplayEmoj] = useState(false)
+
 
     useEffect(async ()=> {
 
@@ -37,7 +41,8 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
                 socket.emit('notifications', {sender:{
                     name: current_user.profileName,
                     avatar: current_user.avatar,
-                    content: post_content
+                    content: post_content,
+                    commentId: replayContent.post_id                  
                 }, reciever: replayContent.creator_id_for_comment, notification: 'replay on your comment'})
 
                 socket.emit('notificationsCount', replayContent.creator_id_for_comment)
@@ -49,26 +54,28 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
             addComment(comment, post_id)
 
             if (creator_id){
+                
 
                 socket.emit('notifications', {sender:{
                     name: current_user.profileName, 
                     avatar: current_user.avatar,
-                    content: post_content
+                    content: post_content,
+                    postId: post_id
                 }
                     , reciever: creator_id._id, notification: 'comment on your post'})
 
                     socket.emit('notificationsCount', creator_id._id)
-
             } else {
 
                 socket.emit('notifications', {sender: {
                     name: current_user.profileName,
                     avatar: current_user.avatar,
-                    content: post_content
+                    content: post_content,
+                    postId: post_id
                 }, 
-                    reciever: postDetails.creator_id._id, notification: 'comment on your post'})
+                    reciever: replayContent.creator_id._id, notification: 'comment on your post'})
 
-                    socket.emit('notificationsCount', postDetails.creator_id._id)
+                    socket.emit('notificationsCount', replayContent.creator_id._id)
 
             }
 
@@ -76,7 +83,7 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
         
         setComment('')
         setTwitterReplayVisibility(false)
-        
+        window.location.reload()
     }
 
     const handleChange = (e) => {
@@ -84,6 +91,18 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
         setComment(e.target.value)
     
     }
+
+    const handleEmojClick = () => {
+        setDisplayEmoj(!displayEmoj)
+    }
+
+    const onEmojiClick = (event, emojiObject) => {
+    
+        setComment(prev => prev+emojiObject.emoji)
+      
+      }
+
+
 
     return(
         <>
@@ -100,7 +119,7 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
 
                 </div>
 
-                <div style={{float:'right'}} >
+                <div style={{float:'right', width: '90%', wordWrap: 'break-word', }} >
                     {post_content}
                 </div>
                 </div>
@@ -113,11 +132,35 @@ const CommentModal = ({postDetails,replayContent,type,post_content,post_id, crea
                         height='48px' 
                         src= {user_avatar} />
                     
-                    <textarea name="content" value={comment} onChange={handleChange}   className="post-input-field" placeholder="Tweet Your Replay" />                    
+                    <textarea onFocus={() => setDisplayEmoj(false)} name="content" value={comment} onChange={handleChange}   className="post-input-field" placeholder="Tweet Your Replay" />                    
                 </div>
-                <div style={{marginTop:'20px', textAlign:'end', height:'fit-content'}}>
+                <div style={{
+                    marginTop:'20px', 
+                    textAlign:'end', 
+                    height:'fit-content',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    fontSize: '30px',
+                    
+                    }}>
+                    <div style={{marginRight: '14px', color:'#1991DA'}} onClick={handleEmojClick}><FontAwesomeIcon icon={faSmile}/></div>
                     <TwitterLargeButton title="replay" width="80px" handleClick={handleClick}/>                
+ 
                 </div>
+                <div style={{
+                borderRadius: '0',
+                position: 'absolute',
+                top: '100px',
+                left: '220px',
+                textAlign: 'center',
+                zIndex:'211',
+                display: displayEmoj?'block':'none'
+                }}>
+                
+                <Picker  onEmojiClick={onEmojiClick} skinTone={SKIN_TONE_MEDIUM_DARK}/>
+            
+            </div>
+
             </Modal>
         </>
     )

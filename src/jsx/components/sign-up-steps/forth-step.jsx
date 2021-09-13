@@ -45,8 +45,6 @@ const VerificationCode = ({ location,displayVerification,setVerificationVisibili
 
         }
         
-        // localStorage.setItem('token',authToken )
-        // history.push('/login')
     }
 
     return(

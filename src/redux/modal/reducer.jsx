@@ -10,7 +10,7 @@ const INITIAL_STATE = {
     displayTweetModal:false,
     twitterButtonActive: true,
     fontWeightSeen: 'normal',
-
+    displayEdit:false,
     postDetails: {
 
         id:'', 
@@ -93,6 +93,13 @@ const modalReducer = (state = INITIAL_STATE, action) => {
                 fontWeightSeen: action.payload
             }
         }
+
+        case types.SET_EDIT_MODAL_VISIBLE: 
+
+            return {
+                ...state,
+                displayEdit: action.payload
+            }
 
         default:
             return state;

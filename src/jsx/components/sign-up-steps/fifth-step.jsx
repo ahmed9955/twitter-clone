@@ -77,7 +77,7 @@ class ResetPasswordAndGender extends React.Component {
                     
               
                     <div style={{position:'relative',top:'200px'}} >
-                        <TwitterLargeButton   title="finish" handleClick={this.handleClick} />
+                        <TwitterLargeButton  width="100%"  title="finish" handleClick={this.handleClick} />
                     </div>                    
                 </Modal>
             </>

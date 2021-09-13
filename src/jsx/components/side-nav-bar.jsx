@@ -88,7 +88,6 @@ const SideNavBar = ({history, user_id, setTweetModalVisibility}) => {
                     </div>}<FontAwesomeIcon icon={faBell}/></section><span>Notification</span></a>
                     <a href="/home/messages"><section><FontAwesomeIcon icon={faEnvelope}/></section><span>Messages</span></a>
                     <a href="/home/bookmarks"><section><FontAwesomeIcon icon={faBookmark}/></section><span>Bookmarks</span></a>
-                    {/* <a href="/home/lists"><section><FontAwesomeIcon icon={faThList}/></section><span>Lists</span></a> */}
                     <a href={`/home/profile/${user_id.user?user_id.user._id:''}`} ><section><FontAwesomeIcon icon={faUser}/></section><span>Profile</span></a>
                     <a href="/home/more"><section><FontAwesomeIcon icon={faInfoCircle}/></section><span>More</span></a>
                     <div style={{ marginTop: '12px',marginLeft: '28px',marginRight: '28px', position:'relative' }}><TwitterLargeButton handleClick={handleTweetModalClick} width="100%" title="tweet"/></div>

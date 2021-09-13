@@ -6,6 +6,7 @@ import { setTwitterButtonActive } from '../../redux/modal/action'
 import { setNewUser } from '../../redux/user/action'
 
 import '../../styles/pages/user-main-page.scss'
+import BookmarkComponent from '../components/bookmarkscomponent'
 import CommentDetails from '../components/comment-details'
 import Explore from '../components/explore'
 import FollowPage from '../components/followPage'
@@ -46,9 +47,10 @@ render(){
                     <Route exact path = '/home/messages' component={Messages} />
                     <Route path = '/home/profile/:id' component={Profile} />
                     <Route path = '/home/explore' component={Explore}/>
+                    <Route path = '/home/bookmarks' component={BookmarkComponent}/>
                     <Route path = '/home/notification' component={Notifications}/>
-                    <Route path = '/home/post_details' component={PostDetails}/>
-                    <Route path = '/home/comment_details' component={CommentDetails}/>
+                    <Route path = '/home/post_details/:id' component={PostDetails}/>
+                    <Route path = '/home/comment_details/:id' component={CommentDetails}/>
                     <Route exact path='/home/followers' component={FollowPage}  />
                     <Route exact path='/home/following' component={FollowPage}  />
                     <Route exact path='/home/following/:id' component={publicFollow}  />

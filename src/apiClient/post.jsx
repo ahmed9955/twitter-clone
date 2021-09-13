@@ -43,6 +43,25 @@ export const getUserPosts = async (id) => {
     return posts
 }
 
+export const getOnePost = async (id) => {
+    
+    const requestOptions = {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+      };
+    
+    const response = await fetch(`${URL}/onepost/${id}`, requestOptions)
+    const posts = await response.json()
+  
+    return posts
+  
+
+}
+
+
 export const newFeeds = async () => {
 
     const requestOptions = {

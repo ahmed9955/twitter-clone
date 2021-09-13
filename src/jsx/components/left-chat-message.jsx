@@ -10,11 +10,12 @@ const LeftChat = ({content}) => {
             <div className="reciever-account-left-chat">
                 <img src={content.sender.avatar} />
                 <span>
-                    <div>{content.sender.name}</div>
+                    <div style={{fontWeight: 'bold'}} >{content.sender.name}</div>
                     <div style={{
                         textAlign:'start',
                         maxWidth:'200px', 
-                        wordBreak:'break-word'
+                        wordBreak:'break-word',
+                        
                         }}>
                             {content.message}
                         </div>

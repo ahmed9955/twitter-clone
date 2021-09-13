@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../styles/components/post.scss'
-import { FavoriteBorder, FavoriteRounded,CommentOutlined, ShareOutlined, VerifiedUser, VerifiedUserRounded, VerifiedUserSharp, VerifiedUserTwoTone } from '@material-ui/icons';
+import { FavoriteBorder, FavoriteRounded,CommentOutlined, ShareOutlined, VerifiedUser, VerifiedUserRounded, VerifiedUserSharp, VerifiedUserTwoTone, Bookmark, ShareSharp } from '@material-ui/icons';
 import { faRetweet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setPostDetails, setReplayContent, setTwitterReplayVisibility } from '../../redux/modal/action';
@@ -10,6 +10,9 @@ import { withRouter } from 'react-router';
 import { profile } from '../../apiClient/user';
 import io from 'socket.io-client'
 import { timeDifference } from '../../apiClient/time-diffrence';
+import BookMarkPopUp from './book-marks-popup';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { addToBookmark, getBookmark } from '../../apiClient/bookmarks';
 
 const socket = io('http://localhost:2000')
 
@@ -24,7 +27,9 @@ class Post extends React.Component {
             likesNum: 0,
             commentsNum:'',
             likesNumText:0,
-            commentsNum:0
+            commentsNum:0,
+            displayBookMarkPopup: false
+
         }
     }
 
@@ -84,24 +89,24 @@ class Post extends React.Component {
         if (like.like){
 
             await this.setState({liked: true})
-            
-            
+                        
             await this.setState({likesNumText: this.state.likesNumText+1})
 
 
-            if (this.props.postDetails.creator_id){
+            if (this.props.creator){
 
                 socket.emit('notifications', {
                     sender: {
                         name: this.props.user_id.user.profileName,
                         avatar: this.props.user_id.user.avatar,
-                        content: this.props.content
+                        content: this.props.content,
+                        postId: this.props.id
                     }
                 
-                , reciever: this.props.postDetails.creator_id._id, 
+                , reciever: this.props.creator._id, 
                 notification: `likes your post`})
                     
-                socket.emit('notificationsCount', this.props.postDetails.creator_id._id)
+                socket.emit('notificationsCount', this.props.creator._id)
             
             } else {
 
@@ -110,8 +115,8 @@ class Post extends React.Component {
                         
                         name: this.props.user_id.user.profileName,
                         avatar: this.props.user_id.user.avatar,
-                        content: this.props.content
-                    
+                        content: this.props.content,
+                        postId: this.props.id
                     }, 
                     reciever: this.props.id_user , 
                     notification: `likes your post`})
@@ -140,7 +145,6 @@ class Post extends React.Component {
 
     handlePostClick = () => {
 
-        this.props.history.push(`/home/post_details`)
 
         const {
 
@@ -166,8 +170,11 @@ class Post extends React.Component {
             avatar,
             comments,
             creator_id: creator,
-            created_at
+            created_at,
         })
+
+        this.props.history.push(`/home/post_details/${id}`)
+
     }
 
     handlePostImgClick = (e) => {
@@ -177,20 +184,46 @@ class Post extends React.Component {
   
     }
 
+
+    handleShareClick = (e) => {
+        e.stopPropagation()
+        this.setState({displayBookMarkPopup: !this.state.displayBookMarkPopup})
+    }
     
+    handleAddToBookmarkClick = (e, id) => {
+        e.stopPropagation()
+        this.setState({displayBookMarkPopup: !this.state.displayBookMarkPopup})
+
+        addToBookmark(id)
+        
+    }
+
+    handleCopyLinkToTweet = (e) => {
+
+        e.stopPropagation()
+        this.setState({displayBookMarkPopup: !this.state.displayBookMarkPopup})
+
+    }
+
+
+
 render(){
 
-    const { profileName, avatar, content, media, created_at } = this.props
+    const { id,profileName, avatar, content, media, created_at } = this.props
 
     return(
     
     <>
-            <div  className="post-container" onClick={this.handlePostClick}>
+            <div  className="post-container"  onClick={this.handlePostClick}>
                 <div className="post-owner">
                     <img onClick = {this.handlePostImgClick} style={{borderRadius:'50%',marginRight:'10px'}} width='48px' height='48px' src={avatar}/>
                     <span>{profileName} <span style={{fontWeight: 'normal', position:'relative', top: '1px', color: '#1991DA'}} > <VerifiedUserTwoTone/>@{profileName} { timeDifference(created_at) }</span></span>
                 </div>
-                <input className="post-content" value={content} style={{backgroundColor: 'inherit', cursor: 'pointer'}} readOnly />
+                <div className="post-content"  style={{
+                    backgroundColor: 'inherit',
+                    cursor: 'pointer',
+                }} 
+                 >{content}</div>
                 {
                 media?
                 !media.endsWith('.mp4') && media 
@@ -220,10 +253,41 @@ render(){
 
                 <div style={{marginBottom:'20px'}} className = 'post-reactions'>
                    <span onClick={this.handleComment}><CommentOutlined />{this.state.commentsNum}</span>
-                   <span><FontAwesomeIcon icon={faRetweet} /> 1</span>
+                   <span><FontAwesomeIcon icon={faRetweet} />0</span>
                    <span style = {{ color : this.state.liked  ?'#E44D77': 'black'}} onClick={this.handleLike} >{ this.state.liked ?<FavoriteRounded/>:<FavoriteBorder />}<section>{this.state.likesNumText}</section></span>
-                   <span ><ShareOutlined/>0</span>
+                   <span onClick={this.handleShareClick} ><ShareOutlined/></span>
+                   <div style={{
+                       width: '280px',
+                       height: '100px',
+                       zIndex: '5000',
+                       marginTop: '7px',
+                       backgroundColor: 'white', 
+                       position:'absolute', 
+                       right: '510px',
+                       display: this.state.displayBookMarkPopup?'flex':'none',
+                       flexDirection: 'column',
+                       justifyContent: 'center',
+                       padding: '10px',
+                       color: 'black',
+                       fontSize: '16px',
+                       fontFamily: 'sans-serif',
+                       }} onClick={(e) => {
+                           e.stopPropagation()
+                       }}>
+                           
+                           <div onClick={(e) => this.handleAddToBookmarkClick(e, id)}  style={{flex: '1', cursor: 'pointer',textAlign: 'start'}} >
+                               <Bookmark/> Add Tweet To Bookmarks
+                            </div>
+                            <CopyToClipboard text = {`http://localhost:3000/home/post_details/${id}`} >
+
+                           <div onClick= {(e) => this.handleCopyLinkToTweet(e, id)} style={{flex: '1', cursor: 'pointer'}}>\
+                           <ShareSharp/> Copy Link To Tweet</div>
+                           </CopyToClipboard>
+                            
+                       </div>
+
                 </div>
+                
             </div>
         </>
     )

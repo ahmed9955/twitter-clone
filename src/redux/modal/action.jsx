@@ -55,3 +55,10 @@ export const setFontWeightSeen = (seen) => ({
     type: types.SET_FONT_WEIGHT_SEEN,
     payload: seen
 })
+
+export const setEditModalVisibility = (display) => ({
+
+    type: types.SET_EDIT_MODAL_VISIBLE,
+    payload: display
+
+})

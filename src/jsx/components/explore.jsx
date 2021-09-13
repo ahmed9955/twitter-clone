@@ -51,7 +51,17 @@ class Explore extends React.Component {
             <div className='tweets-container' style={{flex: '2'}}>
                 <CreatePost />
                 
-                {this.state.newFeeds.map(post => <Post creator = {post.user}  id={post._id} content={post.content} media={post.avatar} created_at={post.createdAt} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
+                {this.state.newFeeds.map(post => <Post 
+                creator = {post.user}  
+                id={post._id} 
+                content={post.content} 
+                media={post.avatar} 
+                created_at={post.createdAt} 
+                comments={post.comments} 
+                likes={post.like}  
+                profileName={post.user.profileName} 
+                avatar={post.user.avatar} 
+                id_user = {post.user._id} />)}
                 
             </div>
 

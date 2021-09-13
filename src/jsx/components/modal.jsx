@@ -4,9 +4,9 @@ import ReactDom from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { connect } from 'react-redux'
-import { setConfirmVisibility, setModalVisibility, setPrivacyVisibility, setResetPasswordVisibility, setTweetModalVisibility, setTwitterReplayVisibility, setVerificationVisibility } from '../../redux/modal/action'
+import { setConfirmVisibility, setEditModalVisibility, setModalVisibility, setPrivacyVisibility, setResetPasswordVisibility, setTweetModalVisibility, setTwitterReplayVisibility, setVerificationVisibility } from '../../redux/modal/action'
 
-const Modal = ({height,setModalVisibility,setPrivacyVisibility,setVerificationVisibility,setTweetModalVisibility,setTwitterReplayVisibility,setConfirmVisibility,display,children,title, stepNumber}) => {
+const Modal = ({setEditModalVisibility ,height,setModalVisibility,setPrivacyVisibility,setVerificationVisibility,setTweetModalVisibility,setTwitterReplayVisibility,setConfirmVisibility,display,children,title, stepNumber}) => {
 
     return ReactDom.createPortal (
            
@@ -20,6 +20,7 @@ const Modal = ({height,setModalVisibility,setPrivacyVisibility,setVerificationVi
                 setResetPasswordVisibility(false)
                 setTwitterReplayVisibility(false)
                 setTweetModalVisibility(false)
+                setEditModalVisibility(false)
 }} />
 
             <div className="modal-body" style={{height}} >
@@ -42,7 +43,9 @@ const mapDispatchToProps = dispatch => ({
     setVerificationVisibility : display => dispatch(setVerificationVisibility(display)),
     setResetPasswordVisibility: display => dispatch(setResetPasswordVisibility(display)),
     setTwitterReplayVisibility: display => dispatch(setTwitterReplayVisibility(display)),
-    setTweetModalVisibility: display => dispatch(setTweetModalVisibility(display))
+    setTweetModalVisibility: display => dispatch(setTweetModalVisibility(display)),
+    setEditModalVisibility: display => dispatch(setEditModalVisibility(display)) 
+
 })
 
 export default connect(null,mapDispatchToProps)(Modal)  

@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../styles/components/messages.scss'
-import { SendRounded, FaceRounded, EmojiFlags, EmojiEmotionsSharp } from '@material-ui/icons'
+import { SendRounded, FaceRounded, EmojiFlags, EmojiEmotionsSharp, ChatBubble } from '@material-ui/icons'
 import io from 'socket.io-client'
 import { followers } from '../../apiClient/follow'
 import { connect } from 'react-redux'
@@ -234,7 +234,13 @@ class Messages extends React.Component {
                         </div>
                 
                     </div>
-                </div>:<div className="messages-view"></div>}
+                </div>:<div style={{
+                    display:'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: '#1991DA',
+                    fontSize: '16px'
+                }} className="messages-view"><p><ChatBubble /> Tab to see a conversation </p></div>}
                 <div className="users-view">
                     <div style={{fontSize:'25px', padding: '20px', borderBottom:'1px solid #cccc', fontWeight:'bold'}} >Chat</div>
                     {this.state.clients.map( (client, key) => (
@@ -246,7 +252,7 @@ class Messages extends React.Component {
                             <div style={{                            
                             fontFamily:'monospace',
                             }}>{client.profileName}</div>
-                            <div style={{color: this.state.colorSeen, fontWeight: this.props.fontWeightSeen ,fontSize: '16px'}}>{ this.handleLastMessage(client)? this.handleLastMessage(client).message.slice(0,10)+'....':'' }</div>
+                            <div style={{color: this.state.colorSeen, fontWeight: this.props.fontWeightSeen ,fontSize: '16px', fontFamily: 'sans-serif'}}>{ this.handleLastMessage(client)? this.handleLastMessage(client).message.slice(0,10)+'....':'' }</div>
                         </div>
                     </div>
                     )) 

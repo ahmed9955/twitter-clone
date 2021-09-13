@@ -131,6 +131,30 @@ return update
 }
 
 
+
+
+export const UpdateProfile = async (raw) => {
+ 
+
+var requestOptions = {
+  method: 'PATCH',
+  body: JSON.stringify(raw),
+  redirect: 'follow',
+  headers: { 
+    'Content-Type': 'application/json',
+    'Authorization': localStorage.token 
+  }
+};
+
+const response = await fetch(`${URL}/me`, requestOptions)
+const update = await response.json()
+
+console.log(update)
+
+}
+
+
+
 export const profile = async (token) => {
 
 

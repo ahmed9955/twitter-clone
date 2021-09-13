@@ -35,6 +35,8 @@ const CreatePost = ({ userAvatar, location }) => {
 
     const handleFocus = () => {
         setVisible(true)    
+        setDisplayEmoj(false)
+
     }
 
     const handleEmojClick = () => {
@@ -160,11 +162,18 @@ const CreatePost = ({ userAvatar, location }) => {
 
 
                         </>
-
-}
+                    }
+                    {location === 'from-modal' &&
+                        <>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div onClick={handleEmojClick}><FontAwesomeIcon icon={faSmile}/></div>
+                        </>
+                    }
                          
                     </div>    
-                    <div className="tweet-button">
+                    <div className="tweet-button">                        
                         <TwitterLargeButton width="150px" type = 'submit'  title="Tweet" />
                     </div>
                 </div>

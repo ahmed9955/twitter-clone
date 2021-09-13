@@ -126,7 +126,6 @@ class SignUpData extends React.Component {
         <Input name='profileName'  type='text' label='Name' handleChange={this.handleChange} />
         <Input  errorColor={this.state.errorColor}  name='email' type='text' label='Email' handleChange={this.handleChange} />
         <label style={{position:'relative',top:'-20px',left:'-28px',color: `${this.state.errColor}` ,fontSize:'15px', visibility:`${this.state.errorVisibility}`}}>{this.state.errorValue}</label>
-        {/* <Input name='password' type='password' label='Password' handleChange={handleChange} /> */}
        
         <div style={{fontWeight:'bold'}}>Date of birth</div>
        

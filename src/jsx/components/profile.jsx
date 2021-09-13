@@ -1,4 +1,4 @@
-import { faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faBirthdayCake, faCalendar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
@@ -6,13 +6,16 @@ import { Route, Switch, withRouter } from 'react-router'
 import { whoToFollow } from '../../apiClient/follow'
 import { getUserPosts } from '../../apiClient/post'
 import { avatar, getOneUser, profile, uploadAvatar, uploadPortrait } from '../../apiClient/user'
+import { setEditModalVisibility } from '../../redux/modal/action'
 import { setLikes, setMedia } from '../../redux/user/action'
 import '../../styles/components/profile.scss'
+import EditModal from './edit-modal'
 import FollowComponent from './follow-component'
 import Likes from './likes'
 import Media from './media'
 import Tweets from './tweets'
 import TweetsAndReplies from './tweets&replies'
+
 
 class Profile extends React.Component {
 
@@ -66,11 +69,18 @@ class Profile extends React.Component {
         let reader = new FileReader()
 
         reader.readAsDataURL(e.target.files[0])
-            
+
         reader.onload =(e) => {
             this.setState({portrait_photo: e.target.result})
         }
         
+    }
+
+    handleEditProfile = (e) => {
+
+        e.stopPropagation();
+        
+        this.props.setEditModalVisibility(true)
     }
 
 render() {
@@ -90,7 +100,7 @@ render() {
                     </div>
                     { this.state.current_user._id === this.state.account_owner._id &&
                     
-                    <div className='edit-profile'>Edit Profile</div>
+                    <div className='edit-profile' onClick = {this.handleEditProfile}>Edit Profile</div>
                     }
                     <div className="profile-picture-rounded">
                         <input id="upload_avatar" onChange={this.handleAvatar} style={{display: 'none'}} type='file' accept='image/*' />
@@ -98,9 +108,10 @@ render() {
                             <img src={this.state.avatarProfile} style={{borderRadius:'50%', border: '5px solid #ffff'}} width='130px' height='130px' />
                         </label>
                         <div style={{textAlign:'start'}}>
-                            <div>{this.state.current_user.profileName}</div>
+                            <div style={{fontWeight: 'bold', fontSize: '20px'}}>{this.state.current_user.profileName}</div>
                             <div>@{this.state.current_user.profileName}</div>
-                            <span> <FontAwesomeIcon icon={faCalendar}  /> joined {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[1]:''} {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[0]:''}  </span>
+                            <div><FontAwesomeIcon icon={faBirthdayCake}/> {this.state.current_user.birthDate}</div>
+                            <span> <FontAwesomeIcon icon={faCalendar}  />  joined {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[1]:''} {this.state.current_user.createdAt?this.state.current_user.createdAt.split('-')[0]:''}  </span>
                             <div className="following">
 
                                 <a href={ 
@@ -170,8 +181,7 @@ render() {
                     <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    width: '350px',
-                    
+                    width: '350px'
             }}>
 
                     <a className="policy">Terms of Service</a>
@@ -183,6 +193,7 @@ render() {
                 </div>                    
             </div>
         </div>    
+        <EditModal />
         </>
     )
 }}
@@ -191,4 +202,10 @@ const mapStateToProps = (state) => ({
     user: state.user
 })
 
-export default withRouter(connect(mapStateToProps)(Profile))
+const mapDispatchToProps = (dispatch) => ({
+
+    setEditModalVisibility: display => dispatch(setEditModalVisibility(display)) 
+
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile))

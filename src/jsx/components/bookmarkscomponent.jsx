@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { getBookmark } from '../../apiClient/bookmarks'
 import { whoToFollow } from '../../apiClient/follow'
-import { newFeeds } from '../../apiClient/post'
 import { profile } from '../../apiClient/user'
-import '../../styles/components/tweets-view.scss'
-import CommentModal from './comment-modal'
-import CreatePost from './create-post'
 import FollowComponent from './follow-component'
 import Post from './post'
 
-class TweetsView extends React.Component {
+class BookmarkComponent extends React.Component {
 
     constructor(){
         super()
 
         this.state = {
-            newFeeds: [],
+            bookmarks: [],
             followers:[],
-
+            current_user: {}
         }
     }
 
@@ -33,30 +29,28 @@ class TweetsView extends React.Component {
         this.setState({followers: whotofollow.filter(user => !this.state.current_user.following.includes(user._id)) })
 
 
-        const newfeed = await newFeeds()
+        const bookmarksposts = await  getBookmark()
 
-        await this.setState({newFeeds: newfeed})
+        if(bookmarksposts){
+            await this.setState({bookmarks: bookmarksposts})
+            
+            console.log(this.state.bookmarks)
+        }
 
-        console.log('feeds',this.state.newFeeds)
+
     }
 
+    render(){
 
-render(){
-
-
-    return(
-        <>
-        <div style={{display:'flex', flexDirection:'row', width: '78vw'}}>
-            <div className='tweets-container'>
-                <CreatePost />
+        return(
+            <>
+            <div style={{display: 'flex'}}>
+                <div style={{flex:'2'}}>
+                 {this.state.bookmarks.map(post => <Post creator = {post.user} created_at = {post.createdAt}  id={post._id} content={post.content} media={post.avatar} comments={post.comments}  likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
+                </div>
                 
-                {this.state.newFeeds.map(post => <Post creator = {post.user} created_at = {post.createdAt}  id={post._id} content={post.content} media={post.avatar} comments={post.comments} likes={post.like}  profileName={post.user.profileName} avatar={post.user.avatar} id_user = {post.user._id} />)}
-                
-            </div>
-
-            <CommentModal creator_id = {this.props.replayContent.creator_id} user_avatar = {this.props.replayContent.user_avatar} profileName = {this.props.replayContent.profileName} avatar = {this.props.replayContent.avatar}  post_id = {this.props.replayContent.post_id} post_content={this.props.replayContent.post_content} />   
-
-            <div style = {{flex:'1',paddingLeft:'20px'}}>
+                <div style={{flex:'1'}}>
+                <div style = {{flex:'1',paddingLeft:'20px'}}>
                     <div style={{height:'354px',borderRadius:'20px',background:'#F7F9F9'}}>
                         <header style={{position:'relative',top:'10px',left:'25px',fontWeight:'bold',fontSize:'18px'}}>Who To Follow</header>
                         {this.state.followers.map( (user, index) => index < 4? <FollowComponent  {...user}  /> : '')}
@@ -90,18 +84,12 @@ render(){
 
                 </div>
             </div>
+                </div>
+            </div>
+            </>
+        )
+    }
 
-        </div>
-  
-        </>
-    )
 }
-}
 
-const mapStateToProps = (state) => ({
-    replayContent: state.modal.replayContent,
-       
-})
-
-
-export default connect(mapStateToProps)(TweetsView)
+export default BookmarkComponent

@@ -83,9 +83,9 @@ const ConfirmSignUp = ({ user,setNewUser,displayConfirm, setConfirmVisibility, s
             <Input errorColor={errorColor} name='email' val={user?user.email:''}  type='text' handleChange={handleChange} label='Email'/>
             <label style={{position:'relative',top:'-20px',left:'-28px',color: `${errColor}` ,fontSize:'15px', visibility:`${errorVisibility}`}}>{errorValue}</label>
             <div style={{display:'flex',flexDirection:'row'}}>
-                <DropDownMenu handleChange={handleChange} val={user? MONTHES[user.birthDate.split('-')[1]]:''}  title='Month' flex = {3} data = {MONTHES} />
-                <DropDownMenu  handleChange={handleChange} val={user?user.birthDate.split('-')[0]:''} title='Day' flex = {1} data = {DAYS} />
-                <DropDownMenu handleChange={handleChange} val={user?user.birthDate.split('-')[2]:''}  title='Year' flex = {2} data = {YEARS} />
+                <DropDownMenu handleChange={handleChange}   val={user? MONTHES[user.birthDate.split('-')[1]]:''}  title='Month' flex = {3} data = {MONTHES} />
+                <DropDownMenu  handleChange={handleChange}  val={user?user.birthDate.split('-')[0]:''} title='Day' flex = {1} data = {DAYS} />
+                <DropDownMenu handleChange={handleChange}   val={user?user.birthDate.split('-')[2]:''}  title='Year' flex = {2} data = {YEARS} />
             </div>
             <div style={{display:'flex',position:'relative',top:'-80px',left:'4px'}}>
                 <label className="drop-label" style={{flex:3}} >Month</label>
